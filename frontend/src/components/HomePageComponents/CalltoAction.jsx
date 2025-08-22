@@ -31,8 +31,8 @@ function CallToAction() {
           className="px-8 py-4 bg-white text-pink-600 font-semibold rounded-2xl shadow-lg hover:bg-gray-100 transition"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-        >
-          Get Started Now
+        ><a href="/login">
+          Get Started Now</a>
         </motion.button>
       </div>
     </section>
