@@ -1,12 +1,13 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages.jsx/Home';
-import Login from './pages.jsx/Login';
-import Register from './pages.jsx/register'; // Changed to capitalize for consistency
-import AdminPage from './pages.jsx/AdminPage';
-import ProfilePage from './pages.jsx/ProfilePage';
-import ProtectedRoute from './pages.jsx/ProtectedRoute';
-import PostSkill from './pages.jsx/PostSkill';
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import "./App.css";
+import Home from "./pages.jsx/Home";
+import Login from "./pages.jsx/Login";
+import Register from "./pages.jsx/register"; // Changed to capitalize for consistency
+import AdminPage from "./pages.jsx/AdminPage";
+import ProfilePage from "./pages.jsx/ProfilePage";
+import ProtectedRoute from "./pages.jsx/ProtectedRoute";
+import PostSkill from "./pages.jsx/PostSkill";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute allowedRoles={['admin']}>
+            <ProtectedRoute allowedRoles={["admin"]}>
               <AdminPage />
             </ProtectedRoute>
           }
@@ -30,7 +31,7 @@ function App() {
         <Route
           path="/postskill"
           element={
-            <ProtectedRoute allowedRoles={['user']}>
+            <ProtectedRoute allowedRoles={["user"]}>
               <PostSkill />
             </ProtectedRoute>
           }
@@ -39,7 +40,7 @@ function App() {
         <Route
           path="/profile"
           element={
-            <ProtectedRoute allowedRoles={['user']}>
+            <ProtectedRoute allowedRoles={["user"]}>
               <ProfilePage />
             </ProtectedRoute>
           }
