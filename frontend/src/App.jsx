@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages.jsx/Home';
-import Login from './pages.jsx/Login';
-import Register from './pages.jsx/register'; // Capital R to match filename
-import AdminPage from './pages.jsx/AdminPage';
-import ProfilePage from './pages.jsx/ProfilePage';
-import ProtectedRoute from './pages.jsx/ProtectedRoute';
-import PostSkill from './pages.jsx/PostSkill';
-import ViewRequest from './pages.jsx/viewrequest'; // Renamed and Capitalized
-import Contact from './pages.jsx/contact'
-=======
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
@@ -31,7 +18,6 @@ import Remoteworks from "./components/ServiceComponents/remoteworks"
 import ExploreSkills from "./pages.jsx/ExploreSkills"
 import AboutPage from "./pages.jsx/AboutPage"
 import ContactPage from "./pages.jsx/ContactPage";
->>>>>>> 3d5bea2f7ed05d11a053344186afc2bd23b6de7c
 
 function App() {
   return (

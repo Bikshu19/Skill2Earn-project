@@ -26,15 +26,6 @@ const categories = [
   "Sports",
 ];
 
-<<<<<<< HEAD
-  // User details states
-  const [location, setLocation] = useState('');
-  const [address, setAddress] = useState('');
-  const [pincode, setPincode] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const [whatsappNumber, setWhatsappNumber] = useState('');
-  const [detailsExist, setDetailsExist] = useState(false);
-=======
 const subcategoriesMap = {
   Technology: [
     "Web Development",
@@ -87,7 +78,6 @@ const subcategoriesMap = {
     "Athletics",
   ],
 };
->>>>>>> 3d5bea2f7ed05d11a053344186afc2bd23b6de7c
 
 const visibilityOptions = ["public", "private", "friends"];
 
