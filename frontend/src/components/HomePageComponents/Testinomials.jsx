@@ -6,19 +6,19 @@ function Testimonials() {
     {
       name: "Ayesha Begum",
       role: "Cooking Classes,Vombey Colony ,Vijayawada",
-      img: "/assets/woman1.jpg",
+      img: "/ayesha.webp",
       text: "This platform gave me the confidence to teach my cooking skills online and earn independently.",
     },
     {
       name: "Lakshmi Devi",
       role: "Tailor,YSR Colony ,Jakkampudi,Vijayawada",
-      img: "./lakshmi.jpg",
+      img: "/lakshmi.jpg",
       text: "Through Skill2Earn, I connected with local customers and now run my own tailoring business from home.",
     },
     {
       name: "Fatima Khan",
       role: "Tutor, ChittiNagar,Vijayawada",
-      img: "/assets/woman3.jpg",
+      img: "/chandu.webp",
       text: "I started giving tuition classes via Skill2Earn and now I support my children’s education with my earnings.",
     },
   ];

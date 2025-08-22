@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 
 // Example skill data
 const skills = [
-  { name: "Tuition", img: "../skills/tuition.jpg" },
-  { name: "Tailoring", img: "../skills/tailoring.jpg" },
-  { name: "Cooking", img: "../skills/cooking.jpg" },
-  { name: "Art & Craft", img: "../skills/artcraft.jpg" },
-  { name: "Music", img: "../skills/music.jpg" },
-  { name: "Fitness", img: "../skills/fitness.jpg" },
+  { name: "Tuition", img: "./tution.webp" },
+  { name: "Tailoring", img: "./lakshmi.jpg" },
+  { name: "Cooking", img: "./cooking.webp" },
+  { name: "Art & Craft", img: "./art.webp" },
+  { name: "Music", img: "./music.webp" },
+  { name: "Fitness", img: "./fitness.webp" },
 ];
 
 export default function PopularSkillsCircle() {

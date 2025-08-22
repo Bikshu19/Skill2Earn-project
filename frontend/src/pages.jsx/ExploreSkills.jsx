@@ -1,10 +1,14 @@
 import React from 'react'
-import ExploreSkills from '../components/ExploreSkills'
+import ExploreSkills1 from '../components/ExploreSkills1'
+import Homenavbar from '../components/HomePageComponents/Homenavbar'
+import HomeFooter from '../components/HomePageComponents/HomeFooter'
 
 function ExploreSkills() {
   return (
     <div>
-       <ExploreSkills/>
+        <Homenavbar/>
+       <ExploreSkills1 />
+       <HomeFooter/>
     </div>
   )
 }

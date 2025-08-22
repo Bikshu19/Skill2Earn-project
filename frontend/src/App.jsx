@@ -8,9 +8,16 @@ import AdminPage from "./pages.jsx/AdminPage";
 import ProfilePage from "./pages.jsx/ProfilePage";
 import ProtectedRoute from "./pages.jsx/ProtectedRoute";
 import PostSkill from "./pages.jsx/PostSkill";
-import ExploreSkills from "./components/ExploreSkills";
 import BabyCare from "./components/ServiceComponents/BabyCare"
 import Beauty from "./components/ServiceComponents/Beauty"
+import Fitness from "./components/ServiceComponents/fitness"
+import HomeDecoration from "./components/ServiceComponents/HemoDecoration"
+import HomeMadeProducts from "./components/ServiceComponents/HomeMadeProducts"
+import Photography from "./components/ServiceComponents/Photography"
+import Remoteworks from "./components/ServiceComponents/remoteworks"
+import ExploreSkills from "./pages.jsx/ExploreSkills"
+import AboutPage from "./pages.jsx/AboutPage"
+import ContactPage from "./pages.jsx/ContactPage";
 
 function App() {
   return (
@@ -23,6 +30,13 @@ function App() {
         <Route path="/explore" element={<ExploreSkills />} />
         <Route path="/babycare" element={<BabyCare />} />
         <Route path="/beauty" element={<Beauty />} />
+        <Route path="/fitness" element={<Fitness />} />
+        <Route path="/homedecoration" element={<HomeDecoration />} />
+        <Route path="/homeproducts" element={<HomeMadeProducts />} />
+        <Route path="/photo" element={<Photography />} />
+        <Route path="/remoteworks" element={< Remoteworks/>} />
+        <Route path="/about" element={< AboutPage/>} />
+        <Route path="/contact" element={< ContactPage/>} />
 
         {/* Protected routes */}
         <Route
