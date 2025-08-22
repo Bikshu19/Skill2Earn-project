@@ -433,7 +433,6 @@ function PostSkillPage() {
   };
 
   return (
-<<<<<<< HEAD
   <div style={{ maxWidth: 600, margin: '2rem auto', textAlign: 'center' }}>
       <h2>Post Skill</h2>
 
