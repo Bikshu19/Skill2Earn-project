@@ -8,15 +8,15 @@ import AdminPage from "./pages.jsx/AdminPage";
 import ProfilePage from "./pages.jsx/ProfilePage";
 import ProtectedRoute from "./pages.jsx/ProtectedRoute";
 import PostSkill from "./pages.jsx/PostSkill";
-import BabyCare from "./components/ServiceComponents/BabyCare"
-import Beauty from "./components/ServiceComponents/Beauty"
-import Fitness from "./components/ServiceComponents/fitness"
-import HomeDecoration from "./components/ServiceComponents/HemoDecoration"
-import HomeMadeProducts from "./components/ServiceComponents/HomeMadeProducts"
-import Photography from "./components/ServiceComponents/Photography"
-import Remoteworks from "./components/ServiceComponents/remoteworks"
-import ExploreSkills from "./pages.jsx/ExploreSkills"
-import AboutPage from "./pages.jsx/AboutPage"
+import BabyCare from "./components/ServiceComponents/BabyCare";
+import Beauty from "./components/ServiceComponents/Beauty";
+import Fitness from "./components/ServiceComponents/fitness";
+import HomeDecoration from "./components/ServiceComponents/HemoDecoration";
+import HomeMadeProducts from "./components/ServiceComponents/HomeMadeProducts";
+import Photography from "./components/ServiceComponents/Photography";
+import Remoteworks from "./components/ServiceComponents/remoteworks";
+import ExploreSkills from "./pages.jsx/ExploreSkills";
+import AboutPage from "./pages.jsx/AboutPage";
 import ContactPage from "./pages.jsx/ContactPage";
 
 function App() {
@@ -27,10 +27,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-<<<<<<< HEAD
-        <Route path="/contact" element={<Contact />} />
-
-=======
         <Route path="/explore" element={<ExploreSkills />} />
         <Route path="/babycare" element={<BabyCare />} />
         <Route path="/beauty" element={<Beauty />} />
@@ -38,10 +34,9 @@ function App() {
         <Route path="/homedecoration" element={<HomeDecoration />} />
         <Route path="/homeproducts" element={<HomeMadeProducts />} />
         <Route path="/photo" element={<Photography />} />
-        <Route path="/remoteworks" element={< Remoteworks/>} />
-        <Route path="/about" element={< AboutPage/>} />
-        <Route path="/contact" element={< ContactPage/>} />
->>>>>>> 3d5bea2f7ed05d11a053344186afc2bd23b6de7c
+        <Route path="/remoteworks" element={<Remoteworks />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         {/* Protected routes */}
         <Route
@@ -52,14 +47,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-         <Route
-          path="/viewrequest"
-          element={
-            <ProtectedRoute allowedRoles={['user']}>
-             <ViewRequest />
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path="/postskill"
           element={

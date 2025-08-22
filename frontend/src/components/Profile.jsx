@@ -322,5 +322,3 @@ const ProfessionalProfile = () => {
 };
 
 export default ProfessionalProfile;
-MONGO_URL =
-  "mongodb+srv://bikshutulimelli:bikshu@cluster0.dxun2jj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
