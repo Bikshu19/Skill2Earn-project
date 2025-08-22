@@ -222,7 +222,6 @@ const createUserDetails = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check if userId is present in token
     if (!decoded.id) {
       return res
         .status(401)
@@ -242,9 +241,12 @@ const createUserDetails = async (req, res) => {
     // Save details on user document
     const updatedUser = await User.findByIdAndUpdate(
       decoded.id,
-      { location, address, pincode, mobilenumber, whatsappnumber },
+      { location, address, pincode, mobileNumber, whatsappNumber },
       { new: true, runValidators: true }
     );
+
+    if (!updatedUser)
+      return res.status(404).json({ message: "User not found" });
 
     res.status(201).json({
       message: "Details saved successfully",

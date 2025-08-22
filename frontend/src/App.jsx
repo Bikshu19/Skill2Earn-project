@@ -27,6 +27,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+<<<<<<< HEAD
+        <Route path="/contact" element={<Contact />} />
+
+=======
         <Route path="/explore" element={<ExploreSkills />} />
         <Route path="/babycare" element={<BabyCare />} />
         <Route path="/beauty" element={<Beauty />} />
@@ -37,6 +41,7 @@ function App() {
         <Route path="/remoteworks" element={< Remoteworks/>} />
         <Route path="/about" element={< AboutPage/>} />
         <Route path="/contact" element={< ContactPage/>} />
+>>>>>>> 3d5bea2f7ed05d11a053344186afc2bd23b6de7c
 
         {/* Protected routes */}
         <Route
@@ -47,7 +52,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+         <Route
+          path="/viewrequest"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+             <ViewRequest />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/postskill"
           element={
@@ -56,7 +68,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/profile"
           element={
