@@ -8,6 +8,9 @@ import AdminPage from "./pages.jsx/AdminPage";
 import ProfilePage from "./pages.jsx/ProfilePage";
 import ProtectedRoute from "./pages.jsx/ProtectedRoute";
 import PostSkill from "./pages.jsx/PostSkill";
+import ExploreSkills from "./components/ExploreSkills";
+import BabyCare from "./components/ServiceComponents/BabyCare"
+import Beauty from "./components/ServiceComponents/Beauty"
 
 function App() {
   return (
