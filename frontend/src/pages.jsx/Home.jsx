@@ -1,26 +1,24 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import Homenavbar from "../components/HomePageComponents/Homenavbar";
+import Hero from "../components/HomePageComponents/Hero";
+import Features from "../components/HomePageComponents/Features";
+import FeaturedSkills from "../components/HomePageComponents/Featuredskills";
+import Testimonials from "../components/HomePageComponents/Testinomials";
+import CallToAction from "../components/HomePageComponents/CalltoAction";
+import HomeFooter from "../components/HomePageComponents/HomeFooter";
 
-function Home() {
-  const navigate = useNavigate();
-
+function homepage() {
   return (
-    <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-      <h1>Welcome to the App</h1>
-      <button
-        style={{ margin: '0.5rem', padding: '0.5rem 1rem' }}
-        onClick={() => navigate('/login')}
-      >
-        Login
-      </button>
-      <button
-        style={{ margin: '0.5rem', padding: '0.5rem 1rem' }}
-        onClick={() => navigate('/register')}
-      >
-        Register
-      </button>
+    <div>
+      <Homenavbar />
+      <Hero />
+      <Features />
+      <FeaturedSkills />
+      <Testimonials />
+      <CallToAction />
+      <HomeFooter />
     </div>
   );
 }
 
-export default Home;
+export default homepage;
