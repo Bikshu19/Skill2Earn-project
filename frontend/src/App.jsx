@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages.jsx/Home';
 import Login from './pages.jsx/Login';
@@ -7,6 +8,9 @@ import AdminPage from './pages.jsx/AdminPage';
 import ProfilePage from './pages.jsx/ProfilePage';
 import ProtectedRoute from './pages.jsx/ProtectedRoute';
 import PostSkill from './pages.jsx/PostSkill';
+import BabyCare from './components/ServiceComponents/BabyCare'
+import Beauty from './components/ServiceComponents/Beauty'
+import ExploreSkills from './components/ExploreSkills';
 
 function App() {
   return (
@@ -16,6 +20,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/explore" element={<ExploreSkills />} />
+        <Route path="/babycare" element={<BabyCare />} />
+        <Route path="/beauty" element={<Beauty />} />
 
         {/* Protected routes */}
         <Route
