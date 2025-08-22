@@ -1,10 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const messageRoutes = require('./routes/messageroute');
 const dotenv = require('dotenv');
 dotenv.config();
 
 const route = require('./routes/userroute');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -27,6 +29,7 @@ mongoose.connect(process.env.MONGO_URL)
 
 // Mount your routes
 app.use('/api', route);
+app.use('/api/messages', messageRoutes);
 
 // Global error handler (to always respond with JSON errors)
 app.use((err, req, res, next) => {

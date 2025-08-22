@@ -2,11 +2,13 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages.jsx/Home';
 import Login from './pages.jsx/Login';
-import Register from './pages.jsx/register'; // Changed to capitalize for consistency
+import Register from './pages.jsx/register'; // Capital R to match filename
 import AdminPage from './pages.jsx/AdminPage';
 import ProfilePage from './pages.jsx/ProfilePage';
 import ProtectedRoute from './pages.jsx/ProtectedRoute';
 import PostSkill from './pages.jsx/PostSkill';
+import ViewRequest from './pages.jsx/viewrequest'; // Renamed and Capitalized
+import Contact from './pages.jsx/contact'
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/contact" element={<Contact />} />
+
 
         {/* Protected routes */}
         <Route
@@ -26,7 +30,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+         <Route
+          path="/viewrequest"
+          element={
+            <ProtectedRoute allowedRoles={['user']}>
+             <ViewRequest />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/postskill"
           element={
@@ -35,7 +46,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/profile"
           element={

@@ -10,8 +10,8 @@ function PostSkill() {
   const [location, setLocation] = useState('');
   const [address, setAddress] = useState('');
   const [pincode, setPincode] = useState('');
-  const [mobilenumber, setMobileNumber] = useState('');
-  const [whatsappnumber, setWhatsappNumber] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('');
   const [detailsExist, setDetailsExist] = useState(false);
 
   // Skills & new skill states
@@ -39,7 +39,6 @@ function PostSkill() {
           const userData = await resUser.json();
           setUsername(userData.username);
           setInputUsername(userData.username);
-          // Assume userData contains skills array with status as 'works'
           if (userData.works) setSkills(userData.works);
         }
 
@@ -52,8 +51,8 @@ function PostSkill() {
           setLocation(detailsData.location || '');
           setAddress(detailsData.address || '');
           setPincode(detailsData.pincode || '');
-          setMobileNumber(detailsData.mobilenumber || '');
-          setWhatsappNumber(detailsData.whatsappnumber || '');
+          setMobileNumber(detailsData.mobileNumber || '');   // camelCase here
+          setWhatsappNumber(detailsData.whatsappNumber || ''); // camelCase here
           setDetailsExist(true);
         }
       } catch (error) {
@@ -95,7 +94,7 @@ function PostSkill() {
 
   // Save or update user details
   const handleSaveDetails = async () => {
-    if (!location || !address || !pincode || !mobilenumber || !whatsappnumber) {
+    if (!location || !address || !pincode || !mobileNumber || !whatsappNumber) {
       alert('Please fill all details');
       return;
     }
@@ -106,7 +105,7 @@ function PostSkill() {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ location, address, pincode, mobilenumber, whatsappnumber }),
+        body: JSON.stringify({ location, address, pincode, mobileNumber, whatsappNumber }),  // camelCase
       });
 
       const data = await res.json();
@@ -177,7 +176,7 @@ function PostSkill() {
 
 
   return (
-    <div style={{ maxWidth: 600, margin: '2rem auto', textAlign: 'center' }}>
+  <div style={{ maxWidth: 600, margin: '2rem auto', textAlign: 'center' }}>
       <h2>Post Skill</h2>
 
       {/* Username editing */}
@@ -225,13 +224,13 @@ function PostSkill() {
       <div>
         <label>
           Mobile Number:
-          <input value={mobilenumber} onChange={(e) => setMobileNumber(e.target.value)} style={{ marginLeft: 8, width: '80%' }} />
+          <input value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} style={{ marginLeft: 8, width: '80%' }} />
         </label>
       </div>
       <div>
         <label>
           WhatsApp Number:
-          <input value={whatsappnumber} onChange={(e) => setWhatsappNumber(e.target.value)} style={{ marginLeft: 8, width: '80%' }} />
+          <input value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} style={{ marginLeft: 8, width: '80%' }} />
         </label>
       </div>
 
