@@ -7,7 +7,9 @@ function PostSkill() {
   return (
     <div>
       <Homenavbar />
-      <Profile />
+      <div style={{ marginTop: "120px" }}>
+        <Profile />
+      </div>
       <HomeFooter />
     </div>
   );

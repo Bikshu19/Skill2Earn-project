@@ -414,11 +414,8 @@ export default function ModernAuthSystem() {
         <div className="text-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{" "}
-            <button
-              onClick={() => handleSignUpClick()}
-              className="font-semibold text-pink-600 hover:text-rose-600 transition-colors duration-200 hover:underline"
-            >
-              Create one now
+            <button className="font-semibold text-pink-600 hover:text-rose-600 transition-colors duration-200 hover:underline">
+              <a href="/register">Create one now</a>
             </button>
           </p>
         </div>

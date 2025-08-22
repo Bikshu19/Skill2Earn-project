@@ -5,7 +5,9 @@ function Login() {
   return (
     <div>
       <Homenavbar />
-      <Loginpanel />
+      <div style={{ marginTop: "170px" }}>
+        <Loginpanel />
+      </div>
     </div>
   );
 }

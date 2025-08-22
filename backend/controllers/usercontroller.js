@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const ADMIN_EMAIL = "admin@example.com";
-const ADMIN_PASSWORD = "Admin";
+const ADMIN_PASSWORD = "AdminDefaultPassword";
 const dotenv = require("dotenv"); // Adjust path to your User model
 
 const registerUser = async (req, res) => {
@@ -214,11 +214,11 @@ const createUserDetails = async (req, res) => {
     console.log("Decoded token:", decoded);
     console.log("Request body:", req.body);
 
-    const { location, address, pincode, mobilenumber, whatsappnumber } =
+    const { location, address, pincode, mobileNumber, whatsappNumber } =
       req.body;
 
     // Basic validation
-    if (!location || !address || !pincode || !mobilenumber || !whatsappnumber) {
+    if (!location || !address || !pincode || !mobileNumber || !whatsappNumber) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -228,14 +228,20 @@ const createUserDetails = async (req, res) => {
         .json({ message: "Invalid token payload: missing user ID" });
     }
 
-    // Check if user already has details set (assumes these fields exist on User)
+    // Check if details already exist (optional: you might want to allow updates here or separate update route)
     const existing = await User.findById(decoded.id).select(
-      "location address pincode mobilenumber whatsappnumber"
+      "location address pincode mobileNumber whatsappNumber"
     );
-    if (existing && existing.location && existing.address) {
-      return res
-        .status(400)
-        .json({ message: "Details already exist. Use update instead." });
+    if (
+      existing &&
+      existing.location &&
+      existing.address &&
+      existing.mobileNumber &&
+      existing.whatsappNumber
+    ) {
+      return res.status(400).json({
+        message: "Details already exist. Use update endpoint instead.",
+      });
     }
 
     // Save details on user document
@@ -354,6 +360,273 @@ const addSkillToUser = async (req, res) => {
     return res.status(500).json({ message: "Server error adding skill" });
   }
 };
+const getUsersWithPendingWorks = async (req, res) => {
+  try {
+    // Find users where at least one work has status 'pending'
+    // Use $elemMatch to get only the pending works inside the works array
+    const users = await User.find(
+      { "works.status": "pending" },
+      {
+        username: 1,
+        gender: 1,
+        email: 1,
+        works: { $elemMatch: { status: "pending" } }, // only pending works
+      }
+    );
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const publishWork = async (req, res) => {
+  try {
+    const { userId, workId } = req.params;
+    const user = await User.findOneAndUpdate(
+      { _id: userId, "works._id": workId },
+      { $set: { "works.$.status": "publish" } },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User or work not found." });
+    }
+    res.status(200).json({ message: "Work status updated to publish." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+const deleteWork = async (req, res) => {
+  try {
+    const { userId, workId } = req.params;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { works: { _id: workId } } },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User or work not found." });
+    }
+    res.status(200).json({ message: "Work deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+const getUsersWithPublicWorks = async (req, res) => {
+  try {
+    const users = await User.find(
+      { "works.visibility": "public" },
+      {
+        username: 1,
+        gender: 1,
+        email: 1,
+        mobileNumber: 1, // include mobile number
+        whatsappNumber: 1, // include whatsapp number
+        works: { $elemMatch: { visibility: "public" } }, // only public works
+      }
+    );
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const sendRequest = async (req, res) => {
+  try {
+    const { ownerId, workId, requesterId } = req.body;
+
+    const [owner, requester] = await Promise.all([
+      User.findById(ownerId),
+      User.findById(requesterId),
+    ]);
+    if (!owner || !requester) {
+      return res.status(404).json({ message: "User(s) not found." });
+    }
+
+    // Gender check: only female to female direct request allowed
+    if (owner.gender === "female" && requester.gender === "female") {
+      const user = await User.findOne({ _id: ownerId, "works._id": workId });
+      if (!user) return res.status(404).json({ message: "Work not found." });
+
+      const work = user.works.id(workId);
+      const existingRequest = work.requests.find(
+        (r) => r.requesterId.equals(requesterId) && r.status === "pending"
+      );
+      if (existingRequest)
+        return res.status(400).json({ message: "Request already sent." });
+
+      work.requests.push({
+        requesterId,
+        status: "pending",
+        requestedAt: new Date(),
+      });
+      await user.save();
+
+      return res.status(200).json({ message: "Request sent successfully." });
+    } else {
+      // Send email notification for other gender combinations
+      await sendEmail(
+        owner.email,
+        "New connection request notification",
+        `User ${requester.username} has requested to connect with you. Please contact them via email.`
+      );
+
+      return res.status(200).json({
+        message: "Email notification sent instead of direct request.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 2. Accept/Delete Request Controller with email sending for automatic mode
+const updateRequestStatus = async (req, res) => {
+  try {
+    const { ownerId, workId, requesterId } = req.body;
+    const { action } = req.params; // 'accept' or 'delete'
+
+    const user = await User.findOne({ _id: ownerId, "works._id": workId });
+    if (!user) return res.status(404).json({ message: "Work not found." });
+
+    const work = user.works.id(workId);
+    const request = work.requests.find((r) =>
+      r.requesterId.equals(requesterId)
+    );
+    if (!request)
+      return res.status(404).json({ message: "Request not found." });
+
+    if (action === "accept") {
+      request.status = "accepted";
+
+      const requesterUser = await User.findById(requesterId);
+      const ownerGender = user.gender;
+      const requesterGender = requesterUser.gender;
+
+      if (ownerGender === "female" && requesterGender === "male") {
+        // If mode is automatic send email automatically
+        if (work.mode === "automatic") {
+          await sendEmail(
+            requesterUser.email,
+            "Contact details for work",
+            `Hello ${requesterUser.username},\n\nContact info:\nEmail: ${user.email}\nPlease contact the owner for further communication.`
+          );
+        }
+        // For manual mode frontend will allow owner to send email manually
+      }
+    } else if (action === "delete") {
+      request.status = "deleted";
+    } else {
+      return res.status(400).json({ message: "Invalid action" });
+    }
+
+    await user.save();
+    return res
+      .status(200)
+      .json({ message: `Request ${action}ed successfully.` });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 3. Get Requests For Work (for owner dashboard)
+const getRequestsForWork = async (req, res) => {
+  try {
+    const { ownerId, workId } = req.params;
+
+    const user = await User.findById(ownerId);
+    if (!user) return res.status(404).json({ message: "User not found." });
+
+    const work = user.works.id(workId);
+    if (!work) return res.status(404).json({ message: "Work not found." });
+
+    const detailedRequests = await Promise.all(
+      work.requests
+        .filter((r) => r.status === "pending")
+        .map(async (r) => {
+          const requester = await User.findById(
+            r.requesterId,
+            "username email gender"
+          );
+          return { ...r.toObject(), requester };
+        })
+    );
+
+    res.status(200).json(detailedRequests);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// 4. Manual Email Send (owner sends email manually to requester)
+const manualSendEmail = async (req, res) => {
+  try {
+    const { ownerId, requesterId } = req.body;
+    const owner = await User.findById(ownerId);
+    const requester = await User.findById(requesterId);
+    if (!owner || !requester) {
+      return res.status(404).json({ message: "User(s) not found." });
+    }
+
+    await sendEmail(
+      requester.email,
+      "Contact details for work - Manual Send",
+      `Hello ${requester.username},\n\nContact info:\nEmail: ${owner.email}\nPlease contact the owner for further communication.`
+    );
+
+    res.status(200).json({ message: "Email sent successfully." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+const getUserContactInfo = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(
+      userId,
+      "username email gender mobileNumber whatsappNumber"
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json({
+      mobileNumber: user.mobileNumber || "N/A",
+      whatsappNumber: user.whatsappNumber || "N/A",
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   registerUser,
@@ -363,4 +636,14 @@ module.exports = {
   createUserDetails,
   updateUserDetails,
   addSkillToUser,
+  getUsersWithPendingWorks,
+  deleteUserById,
+  publishWork,
+  deleteUserId,
+  deleteWork,
+  getUsersWithPublicWorks,
+  sendRequest,
+  updateRequestStatus,
+  getRequestsForWork,
+  manualSendEmail,
 };

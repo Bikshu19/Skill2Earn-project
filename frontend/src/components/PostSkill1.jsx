@@ -97,7 +97,7 @@ function PostSkillPage() {
     category: "",
     subcategory: "",
     description: "",
-    image: null,
+    image: null, // Store File object here
     visibility: "public",
   });
   const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -222,6 +222,16 @@ function PostSkillPage() {
     });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCurrentSkill((prev) => ({
+        ...prev,
+        image: file, // store the file object here
+      }));
+    }
+  };
+
   const handleAddSkill = async () => {
     if (
       !currentSkill.category ||
@@ -246,6 +256,7 @@ function PostSkillPage() {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          // Content-Type NOT set manually for FormData request
         },
         body: formData,
       });
@@ -409,7 +420,6 @@ function PostSkillPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Input group reusable style */}
               {[
                 {
                   icon: <MapPin className="w-5 h-5" />,
@@ -464,12 +474,11 @@ function PostSkillPage() {
                     value={userProfile[field]}
                     disabled={!isEditingDetails}
                     onChange={(e) => handleInputChange(field, e.target.value)}
-                    className={`w-full p-3 rounded-lg border transition 
-                      ${
-                        isEditingDetails
-                          ? "border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                          : "bg-gray-50 border-gray-200 text-gray-700"
-                      }`}
+                    className={`w-full p-3 rounded-lg border transition ${
+                      isEditingDetails
+                        ? "border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        : "bg-gray-50 border-gray-200 text-gray-700"
+                    }`}
                   />
                 </div>
               ))}
@@ -613,25 +622,25 @@ function PostSkillPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 items-center">
                 {/* Upload Image */}
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-pink-700">
-                    Upload Image
-                  </label>
-                  <label className="flex items-center justify-center gap-3 w-full p-4 border-2 border-dashed border-pink-300 rounded-lg cursor-pointer hover:bg-pink-100 transition-colors text-pink-600 font-medium select-none">
+                <div>
+                  <label className="flex items-center gap-2 text-pink-700 font-semibold text-sm cursor-pointer select-none">
                     <Upload className="w-6 h-6" />
-                    Choose Image
+                    Upload Image
                     <input
                       type="file"
-                      className="hidden"
+                      name="image"
                       accept="image/*"
-                      onChange={(e) =>
-                        e.target.files[0] &&
-                        handleSkillChange("image", e.target.files)
-                      }
+                      onChange={handleFileChange}
+                      className="hidden"
                     />
                   </label>
+                  {currentSkill.image && (
+                    <span className="text-pink-600 text-sm mt-1 block select-text">
+                      {currentSkill.image.name} selected
+                    </span>
+                  )}
                 </div>
 
                 {/* Visibility */}

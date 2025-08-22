@@ -5,7 +5,9 @@ function Register() {
   return (
     <div>
       <Homenavbar />
-      <Registerpanel />
+      <div style={{ marginTop: "80px" }}>
+        <Registerpanel />
+      </div>
     </div>
   );
 }

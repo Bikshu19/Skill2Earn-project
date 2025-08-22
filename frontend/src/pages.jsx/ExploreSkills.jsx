@@ -1,16 +1,18 @@
-import React from 'react'
-import ExploreSkills1 from '../components/ExploreSkills1'
-import Homenavbar from '../components/HomePageComponents/Homenavbar'
-import HomeFooter from '../components/HomePageComponents/HomeFooter'
+import React from "react";
+import ExploreSkills1 from "../components/ExploreSkills1";
+import Homenavbar from "../components/HomePageComponents/Homenavbar";
+import HomeFooter from "../components/HomePageComponents/HomeFooter";
 
 function ExploreSkills() {
   return (
-    <div>
-        <Homenavbar/>
-       <ExploreSkills1 />
-       <HomeFooter/>
-    </div>
-  )
+    <>
+      <Homenavbar />
+      <div style={{ marginTop: "50px" }}>
+        <ExploreSkills1 />
+      </div>
+      <HomeFooter />
+    </>
+  );
 }
 
-export default ExploreSkills
+export default ExploreSkills;
