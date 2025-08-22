@@ -83,7 +83,7 @@ export default function ModernAuthSystem() {
               navigate("/admin");
             } else if (data.role === "user") {
               console.log("Navigate to profile");
-              navigate("/profile");
+              navigate("/");
             } else {
               navigate("/"); // fallback
             }
