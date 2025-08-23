@@ -19,7 +19,7 @@ function UsersWithWorks() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://localhost:5000/api/users-with-works", {
+      const res = await fetch("https://skill2earn-project.onrender.com/api/users-with-works", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
