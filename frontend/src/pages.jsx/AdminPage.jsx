@@ -28,7 +28,7 @@ function AdminPage() {
     setLoadingUsers(true);
     setUserError(null);
     try {
-      const response = await fetch("http://localhost:5000/api/pending-users");
+      const response = await fetch("https://skill2earn-project.onrender.com/api/pending-users");
       if (!response.ok) throw new Error("Failed to fetch users");
       const data = await response.json();
       setUsers(data);
@@ -43,7 +43,7 @@ function AdminPage() {
     setLoadingMessages(true);
     setMessageError(null);
     try {
-      const response = await fetch("http://localhost:5000/api/messages");
+      const response = await fetch("https://skill2earn-project.onrender.com/api/messages");
       if (!response.ok) throw new Error("Failed to fetch messages");
       const data = await response.json();
       setMessages(data);
@@ -62,7 +62,7 @@ function AdminPage() {
   const publishWork = async (userId, workId) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/${userId}/works/${workId}/publish`,
+        `https://skill2earn-project.onrender.com/api/users/${userId}/works/${workId}/publish`,
         { method: "PUT" }
       );
       if (!response.ok) throw new Error("Failed to update status");
@@ -76,7 +76,7 @@ function AdminPage() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/${userId}`,
+        `https://skill2earn-project.onrender.com/api/users/${userId}`,
         { method: "DELETE" }
       );
       if (!response.ok) throw new Error("Failed to delete user");
@@ -91,7 +91,7 @@ function AdminPage() {
       return;
     try {
       const response = await fetch(
-        `http://localhost:5000/api/messages/${messageId}`,
+        `https://skill2earn-project.onrender.com/api/messages/${messageId}`,
         { method: "DELETE" }
       );
       if (!response.ok) throw new Error("Failed to delete message");
