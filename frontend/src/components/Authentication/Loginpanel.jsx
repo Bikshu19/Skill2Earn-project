@@ -55,7 +55,7 @@ export default function ModernAuthSystem() {
         setIsLoading(true);
 
         try {
-          const res = await fetch("http://localhost:5000/api/login", {
+          const res = await fetch("https://skill2earn-project.onrender.com/api/login", {
             // Change URL according to backend URL
             method: "POST",
             headers: { "Content-Type": "application/json" },
