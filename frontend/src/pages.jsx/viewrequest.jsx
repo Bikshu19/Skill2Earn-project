@@ -13,7 +13,7 @@ function ViewRequest() {
       if (!token) return;
 
       try {
-        const res = await fetch('http://localhost:5000/api/me', {
+        const res = await fetch('https://skill2earn-project.onrender.com/api/me', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error('Failed to fetch owner info');
@@ -30,7 +30,7 @@ function ViewRequest() {
         // For each work, fetch pending requests
         const allRequests = await Promise.all(
           data.works.map(async (work) => {
-            const resReqs = await fetch(`http://localhost:5000/api/users/${data._id}/works/${work._id}/requests`);
+            const resReqs = await fetch(`https://skill2earn-project.onrender.com/api/users/${data._id}/works/${work._id}/requests`);
             if (!resReqs.ok) return [];
             const reqs = await resReqs.json();
             // Attach work info to each request for display purposes
@@ -57,7 +57,7 @@ function ViewRequest() {
   const handleRequestAction = async (requesterId, workId, action) => {
     setMessage(null);
     try {
-      const res = await fetch(`http://localhost:5000/api/works/request/${action}`, {
+      const res = await fetch(`https://skill2earn-project.onrender.com/api/works/request/${action}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ownerId, workId, requesterId }),
