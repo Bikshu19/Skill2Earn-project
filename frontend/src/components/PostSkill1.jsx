@@ -78,7 +78,7 @@ const subcategoriesMap = {
 };
 
 const visibilityOptions = ["public", "private", "friends"];
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://skill2earn-project.onrender.com/api";
 
 function PostSkillPage() {
   const token = localStorage.getItem("token");
