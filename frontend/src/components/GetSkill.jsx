@@ -20,7 +20,7 @@ function SkillsByEmail() {
       // Create query string with email
       const params = new URLSearchParams({ email: email.trim() });
       const res = await fetch(
-        `http://localhost:5000/api/skills?${params.toString()}`
+        `https://skill2earn-project.onrender.com/api/skills?${params.toString()}`
       );
 
       if (!res.ok) {
