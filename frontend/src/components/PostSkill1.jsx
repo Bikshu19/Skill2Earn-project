@@ -88,7 +88,7 @@ function PostSkillPage() {
     location: "",
     address: "",
     pincode: "",
-    contactNumber: "",
+    mobileNumber: "",
     whatsappNumber: "",
   });
   const [skills, setSkills] = useState([]);
@@ -124,7 +124,7 @@ function PostSkillPage() {
           location: data.location || "",
           address: data.address || "",
           pincode: data.pincode || "",
-          contactNumber: data.mobilenumber || "",
+          mobileNumber: data.mobileNumber || "",
           whatsappNumber: data.whatsappnumber || "",
         });
         setTempUsername(data.username || "");
@@ -178,7 +178,7 @@ function PostSkillPage() {
       !userProfile.location.trim() ||
       !userProfile.address.trim() ||
       !userProfile.pincode.trim() ||
-      !userProfile.contactNumber.trim() ||
+      !userProfile.mobileNumber.trim() ||
       !userProfile.whatsappNumber.trim()
     ) {
       alert("Please fill all details");
@@ -197,7 +197,7 @@ function PostSkillPage() {
           location: userProfile.location,
           address: userProfile.address,
           pincode: userProfile.pincode,
-          mobilenumber: userProfile.contactNumber,
+          mobilenumber: userProfile.mobileNumber,
           whatsappnumber: userProfile.whatsappNumber,
         }),
       });
@@ -445,10 +445,10 @@ function PostSkillPage() {
                 },
                 {
                   icon: <Phone className="w-5 h-5" />,
-                  label: "Contact Number",
-                  field: "contactNumber",
+                  label: "Mobile Number",
+                  field: "mobileNumber", // Fixed key here
                   type: "tel",
-                  placeholder: "Enter contact number",
+                  placeholder: "Enter mobile number",
                 },
                 {
                   icon: <MessageCircle className="w-5 h-5" />,

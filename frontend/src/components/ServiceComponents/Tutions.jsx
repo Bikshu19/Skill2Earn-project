@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import {
   Heart,
   MapPin,
-  User,
-  Calendar,
   Eye,
   MessageCircle,
   Search,
-  Filter,
   Star,
   Scissors,
   Users,
@@ -22,230 +19,228 @@ const TailoringSkillsDisplay = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ id: 1 });
+  const [currentUser] = useState({ id: 1 });
 
-  // Mock tailoring data - replace with actual API calls
+  // Mock data: 10 items total — first 6 are public, last 4 are private (premium)
   const fetchTailoringSkills = async () => {
     try {
       setLoading(true);
 
-      // FOR PRODUCTION: Replace with actual API call
-      /*
-      const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/tailoring-skills', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-      const data = await response.json();
-      setSkills(data);
-      */
+      const mockTailoringData =[
+  {
+    id: 1,
+    title: "Mathematics Tutor",
+    description:
+      "Provides personalized math coaching for students from grade 6 to 12.",
+    image:
+      "https://images.unsplash.com/photo-1581091215368-6fc4f0e7f19f?w=600&h=400&fit=crop",
+    username: "Rohit Sharma",
+    address: "Delhi, India",
+    category: "Tuitions",
+    createdAt: "2024-03-12",
+    likes: 120,
+    isLiked: false,
+    views: 250,
+    comments: 18,
+    rating: 4.7,
+    experience: "5 years",
+    specialties: ["Algebra", "Geometry", "Calculus"],
+    isPublic: true,
+  },
+  {
+    id: 2,
+    title: "Science Tutor",
+    description:
+      "Expert in Physics, Chemistry, and Biology for high school students.",
+    image:
+      "https://images.unsplash.com/photo-1600185361597-4c4c1f8c1fa0?w=600&h=400&fit=crop",
+    username: "Neha Verma",
+    address: "Mumbai, India",
+    category: "Tuitions",
+    createdAt: "2024-03-10",
+    likes: 140,
+    isLiked: true,
+    views: 300,
+    comments: 22,
+    rating: 4.8,
+    experience: "6 years",
+    specialties: ["Physics", "Chemistry", "Biology"],
+    isPublic: true,
+  },
+  {
+    id: 3,
+    title: "English Language Tutor",
+    description:
+      "Helps students improve grammar, writing, and communication skills.",
+    image:
+      "https://images.unsplash.com/photo-1601599532232-69d5f231a342?w=600&h=400&fit=crop",
+    username: "Priya Singh",
+    address: "Bangalore, India",
+    category: "Tuitions",
+    createdAt: "2024-03-08",
+    likes: 110,
+    isLiked: false,
+    views: 220,
+    comments: 15,
+    rating: 4.6,
+    experience: "4 years",
+    specialties: ["Grammar", "Essay Writing", "Public Speaking"],
+    isPublic: true,
+  },
+  {
+    id: 4,
+    title: "Computer Science Tutor",
+    description:
+      "Provides programming and computer science coaching for beginners and intermediate students.",
+    image:
+      "https://images.unsplash.com/photo-1610426613092-7d758f06bfe7?w=600&h=400&fit=crop",
+    username: "Amit Raj",
+    address: "Pune, India",
+    category: "Tuitions",
+    createdAt: "2024-03-05",
+    likes: 130,
+    isLiked: false,
+    views: 250,
+    comments: 18,
+    rating: 4.7,
+    experience: "5 years",
+    specialties: ["Python", "Java", "Data Structures"],
+    isPublic: true,
+  },
+  {
+    id: 5,
+    title: "Accountancy Tutor",
+    description:
+      "Expert in Accountancy for high school and college students, including practical examples.",
+    image:
+      "https://images.unsplash.com/photo-1590608897129-79b81d5df1f3?w=600&h=400&fit=crop",
+    username: "Kavita Reddy",
+    address: "Hyderabad, India",
+    category: "Tuitions",
+    createdAt: "2024-03-02",
+    likes: 150,
+    isLiked: true,
+    views: 280,
+    comments: 20,
+    rating: 4.8,
+    experience: "7 years",
+    specialties: ["Financial Accounting", "Costing", "Taxation"],
+    isPublic: true,
+  },
+  {
+    id: 6,
+    title: "Language Tutor (French)",
+    description:
+      "Teaches French language from basics to advanced, including conversation practice.",
+    image:
+      "https://images.unsplash.com/photo-1603031767641-42df2a17b0f1?w=600&h=400&fit=crop",
+    username: "Sonia Kapoor",
+    address: "Goa, India",
+    category: "Tuitions",
+    createdAt: "2024-02-28",
+    likes: 170,
+    isLiked: false,
+    views: 300,
+    comments: 25,
+    rating: 4.9,
+    experience: "8 years",
+    specialties: ["French Grammar", "Speaking", "Writing"],
+    isPublic: true,
+  },
 
-      // DEMO DATA - 10 tailoring professionals
-      const mockTailoringData = [
-        {
-          id: 1,
-          title: "Math & Science Tutor",
-          description:
-            "Experienced tutor for high school students, specializing in Math and Science. Helps students from rural and urban areas excel in board exams with personalized guidance.",
-          image:
-            "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=600&h=400&fit=crop",
-          username: "Ravi Kumar",
-          address: "Varanasi, India",
-          category: "High School Tuition",
-          createdAt: "2024-02-01",
-          likes: 120,
-          isLiked: false,
-          views: 340,
-          comments: 27,
-          rating: 4.8,
-          experience: "8 years",
-          specialties: ["Math", "Physics", "Chemistry"],
-        },
-        {
-          id: 2,
-          title: "English & Spoken Skills Coach",
-          description:
-            "Focused on improving English grammar, spoken fluency, and communication skills for students and working professionals in small towns and cities.",
-          image:
-            "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=600&h=400&fit=crop",
-          username: "Anjali Verma",
-          address: "Jaipur, India",
-          category: "Language Tuition",
-          createdAt: "2024-01-15",
-          likes: 98,
-          isLiked: false,
-          views: 280,
-          comments: 19,
-          rating: 4.7,
-          experience: "6 years",
-          specialties: ["English Grammar", "Spoken English", "Communication"],
-        },
-        {
-          id: 3,
-          title: "Village Home Tutor",
-          description:
-            "Passionate about teaching kids in rural areas with limited resources. Provides affordable tuition for all school subjects.",
-          image:
-            "https://images.unsplash.com/photo-1588072432836-e10032774350?w=600&h=400&fit=crop",
-          username: "Suresh Patel",
-          address: "Ahmedabad, India",
-          category: "Primary School Tuition",
-          createdAt: "2024-03-05",
-          likes: 75,
-          isLiked: false,
-          views: 190,
-          comments: 15,
-          rating: 4.6,
-          experience: "5 years",
-          specialties: [
-            "All Subjects",
-            "Village Tutoring",
-            "Child Development",
-          ],
-        },
-        {
-          id: 4,
-          title: "NEET & JEE Coaching Expert",
-          description:
-            "Specialist in preparing students for competitive exams like NEET and JEE. Known for clear concepts and result-driven teaching.",
-          image:
-            "https://images.unsplash.com/photo-1581092334319-5c4a1a9ecf52?w=600&h=400&fit=crop",
-          username: "Dr. Meena Gupta",
-          address: "Hyderabad, India",
-          category: "Competitive Exam Coaching",
-          createdAt: "2024-02-20",
-          likes: 200,
-          isLiked: false,
-          views: 480,
-          comments: 32,
-          rating: 4.9,
-          experience: "12 years",
-          specialties: ["NEET", "JEE", "Biology", "Physics"],
-        },
-        {
-          id: 5,
-          title: "Computer & Coding Trainer",
-          description:
-            "Provides hands-on training in computer basics, coding, and internet literacy for students in both villages and cities.",
-          image:
-            "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop",
-          username: "Arjun Reddy",
-          address: "Bangalore, India",
-          category: "IT & Computer Training",
-          createdAt: "2024-01-28",
-          likes: 145,
-          isLiked: false,
-          views: 360,
-          comments: 25,
-          rating: 4.8,
-          experience: "7 years",
-          specialties: ["Computer Basics", "Coding", "Digital Literacy"],
-        },
-        {
-          id: 6,
-          title: "Commerce & Accounts Mentor",
-          description:
-            "Guiding commerce students in Accounts, Business Studies, and Economics with a focus on real-world applications.",
-          image:
-            "https://images.unsplash.com/photo-1581090700227-4c4efc0e98d1?w=600&h=400&fit=crop",
-          username: "Pooja Sharma",
-          address: "Lucknow, India",
-          category: "Commerce Tuition",
-          createdAt: "2024-03-01",
-          likes: 102,
-          isLiked: false,
-          views: 250,
-          comments: 21,
-          rating: 4.7,
-          experience: "9 years",
-          specialties: ["Accounts", "Economics", "Business Studies"],
-        },
-        {
-          id: 7,
-          title: "Village Evening Tutor",
-          description:
-            "Runs evening tuition batches for students in villages after school hours. Focused on improving basic literacy and numeracy.",
-          image:
-            "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&h=400&fit=crop",
-          username: "Sunita Devi",
-          address: "Patna, India",
-          category: "Village Tuition",
-          createdAt: "2024-02-10",
-          likes: 87,
-          isLiked: false,
-          views: 210,
-          comments: 14,
-          rating: 4.5,
-          experience: "4 years",
-          specialties: ["Reading", "Writing", "Math"],
-        },
-        {
-          id: 8,
-          title: "Spoken Hindi & Regional Languages Tutor",
-          description:
-            "Helps students and migrants learn Hindi and other regional languages for better communication in villages and towns.",
-          image:
-            "https://images.unsplash.com/photo-1614690403638-9605b9c80814?w=600&h=400&fit=crop",
-          username: "Rahul Yadav",
-          address: "Nagpur, India",
-          category: "Language Tuition",
-          createdAt: "2024-01-18",
-          likes: 65,
-          isLiked: false,
-          views: 150,
-          comments: 10,
-          rating: 4.4,
-          experience: "3 years",
-          specialties: ["Hindi", "Marathi", "Spoken Language"],
-        },
-        {
-          id: 9,
-          title: "Art & Creative Skills Tutor",
-          description:
-            "Encourages creativity in children by teaching drawing, painting, and craft. Conducts workshops in both rural schools and urban centers.",
-          image:
-            "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600&h=400&fit=crop",
-          username: "Kiran Joshi",
-          address: "Pune, India",
-          category: "Arts & Crafts Tuition",
-          createdAt: "2024-02-22",
-          likes: 72,
-          isLiked: false,
-          views: 195,
-          comments: 12,
-          rating: 4.6,
-          experience: "6 years",
-          specialties: ["Drawing", "Painting", "Craft"],
-        },
-        {
-          id: 10,
-          title: "Personality Development & Career Guide",
-          description:
-            "Mentors students in soft skills, interview preparation, and career guidance. Works with both city and rural aspirants.",
-          image:
-            "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=600&h=400&fit=crop",
-          username: "Neha Kapoor",
-          address: "Chandigarh, India",
-          category: "Career Coaching",
-          createdAt: "2024-03-08",
-          likes: 134,
-          isLiked: false,
-          views: 320,
-          comments: 22,
-          rating: 4.8,
-          experience: "10 years",
-          specialties: ["Soft Skills", "Career Guidance", "Interview Prep"],
-        },
-      ];
-
+  // PRIVATE / PREMIUM (4)
+  {
+    id: 7,
+    title: "IIT-JEE Mathematics Tutor",
+    description:
+      "Provides advanced coaching for IIT-JEE aspirants with top-quality practice materials.",
+    image:
+      "https://images.unsplash.com/photo-1618220511955-fbcd9c44d76?w=600&h=400&fit=crop",
+    username: "Rohit Malhotra",
+    address: "Delhi, India",
+    category: "Tuitions",
+    createdAt: "2024-02-20",
+    likes: 200,
+    isLiked: true,
+    views: 450,
+    comments: 40,
+    rating: 5.0,
+    experience: "12 years",
+    specialties: ["IIT-JEE Math", "Aptitude", "Problem Solving"],
+    isPremium: true,
+    isPublic: false,
+  },
+  {
+    id: 8,
+    title: "Medical Entrance Biology Tutor",
+    description:
+      "Coaches students for NEET and other medical entrance exams with top results.",
+    image:
+      "https://images.unsplash.com/photo-1595526114035-0d45e7abf0c6?w=600&h=400&fit=crop",
+    username: "Neha Jain",
+    address: "Jaipur, India",
+    category: "Tuitions",
+    createdAt: "2024-02-18",
+    likes: 190,
+    isLiked: true,
+    views: 420,
+    comments: 38,
+    rating: 4.9,
+    experience: "10 years",
+    specialties: ["NEET Biology", "MCQs Practice", "Conceptual Learning"],
+    isPremium: true,
+    isPublic: false,
+  },
+  {
+    id: 9,
+    title: "SAT/ACT English Tutor",
+    description:
+      "Prepares students for SAT and ACT English sections with personalized coaching.",
+    image:
+      "https://images.unsplash.com/photo-1600607689863-1c3d04f43e3f?w=600&h=400&fit=crop",
+    username: "Amit Patel",
+    address: "Ahmedabad, India",
+    category: "Tuitions",
+    createdAt: "2024-02-15",
+    likes: 180,
+    isLiked: false,
+    views: 390,
+    comments: 25,
+    rating: 4.8,
+    experience: "9 years",
+    specialties: ["SAT English", "ACT English", "Essay Writing"],
+    isPremium: true,
+    isPublic: false,
+  },
+  {
+    id: 10,
+    title: "Exclusive Coding Mentor",
+    description:
+      "Provides 1-on-1 mentorship for advanced coding and programming competitions.",
+    image:
+      "https://images.unsplash.com/photo-1600585154340-1c3d04f43e3f?w=600&h=400&fit=crop",
+    username: "Vikram Rao",
+    address: "Mumbai, India",
+    category: "Tuitions",
+    createdAt: "2024-02-12",
+    likes: 210,
+    isLiked: true,
+    views: 420,
+    comments: 32,
+    rating: 4.9,
+    experience: "10 years",
+    specialties: ["Algorithms", "Data Structures", "Competitive Coding"],
+    isPremium: true,
+    isPublic: false,
+  }
+];
+      // Set all skills; show only public (first 6) initially
       setTimeout(() => {
         setSkills(mockTailoringData);
-        setDisplayedSkills(mockTailoringData.slice(0, 6)); // Show first 6
+        const publicSkills = mockTailoringData.filter((s) => s.isPublic);
+        setDisplayedSkills(publicSkills.slice(0, 6));
         setLoading(false);
-      }, 1200);
+      }, 800);
     } catch (error) {
       console.error("Error fetching skills:", error);
       setLoading(false);
@@ -254,30 +249,28 @@ const TailoringSkillsDisplay = () => {
 
   const toggleLike = async (skillId) => {
     try {
-      setSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
 
-      setDisplayedSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setDisplayedSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
     } catch (error) {
       console.error("Error toggling like:", error);
@@ -289,7 +282,7 @@ const TailoringSkillsDisplay = () => {
       setShowLoginModal(true);
     } else {
       setShowMore(true);
-      setDisplayedSkills(skills); // Show all skills
+      setDisplayedSkills(skills); // show all (public + private)
     }
   };
 
@@ -297,7 +290,7 @@ const TailoringSkillsDisplay = () => {
     setIsLoggedIn(true);
     setShowLoginModal(false);
     setShowMore(true);
-    setDisplayedSkills(skills); // Show all skills after login
+    setDisplayedSkills(skills); // after login show all
   };
 
   const filteredSkills = displayedSkills.filter(
@@ -310,25 +303,26 @@ const TailoringSkillsDisplay = () => {
 
   useEffect(() => {
     fetchTailoringSkills();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 p-6">
         <div className="max-w-7xl mx-auto space-y-8">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="animate-pulse">
               <div className="flex flex-col lg:flex-row gap-8 items-center">
-                <div className="w-full lg:w-96 h-64 bg-purple-200/50 rounded-3xl"></div>
+                <div className="w-full lg:w-96 h-64 bg-pink-200/50 rounded-3xl"></div>
                 <div className="flex-1 space-y-4">
-                  <div className="h-8 bg-purple-200/60 rounded w-3/4"></div>
-                  <div className="h-4 bg-purple-200/40 rounded"></div>
-                  <div className="h-4 bg-purple-200/40 rounded w-5/6"></div>
+                  <div className="h-8 bg-pink-200/60 rounded w-3/4"></div>
+                  <div className="h-4 bg-pink-200/40 rounded"></div>
+                  <div className="h-4 bg-pink-200/40 rounded w-5/6"></div>
                   <div className="flex gap-4 mt-6">
-                    <div className="w-12 h-12 bg-purple-200/60 rounded-full"></div>
+                    <div className="w-12 h-12 bg-pink-200/60 rounded-full"></div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-purple-200/50 rounded w-32"></div>
-                      <div className="h-3 bg-purple-200/40 rounded w-24"></div>
+                      <div className="h-4 bg-pink-200/50 rounded w-32"></div>
+                      <div className="h-3 bg-pink-200/40 rounded w-24"></div>
                     </div>
                   </div>
                 </div>
@@ -341,35 +335,34 @@ const TailoringSkillsDisplay = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-purple-200/40 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-pink-200/40 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative z-10 p-6">
         {/* Header */}
         <div className="max-w-7xl mx-auto text-center mb-16">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-gray-800">
-            Master <span className="text-purple-600">Tailors</span>
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-[#1F2937]">
+            Master <span className="text-[#DB2777]">Women</span> Tutors
           </h1>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed mb-8">
-            Discover skilled{" "}
-            <span className="text-purple-600">tailoring professionals</span> for
-            all your custom clothing needs
+          <p className="text-xl text-[#374151] max-w-2xl mx-auto leading-relaxed mb-8">
+            Discover skilled <span className="text-[#DB2777]">Tutors</span> for
+            all your custom requirement needs
           </p>
 
           {/* Search Bar */}
           <div className="max-w-md mx-auto relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-purple-400" />
+              <Search className="h-5 w-5 text-[#DB2777]" />
             </div>
             <input
               type="text"
               placeholder="Search tailors, specialties, locations..."
-              className="w-full pl-10 pr-4 py-3 border-2 border-purple-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-white transition-all duration-300"
+              className="w-full pl-10 pr-4 py-3 border-2 border-pink-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-pink-600 focus:bg-white transition-all duration-300"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -378,18 +371,16 @@ const TailoringSkillsDisplay = () => {
           {/* Stats */}
           <div className="flex justify-center gap-8 mt-8">
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">
-                {skills.length}+
-              </div>
-              <div className="text-gray-600">Expert Tailors</div>
+              <div className="text-3xl font-bold text-[#DB2777]">{skills.length}+</div>
+              <div className="text-[#374151]">Expertise Tutors</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">50k+</div>
-              <div className="text-gray-600">Happy Customers</div>
+              <div className="text-3xl font-bold text-[#DB2777]">50+</div>
+              <div className="text-[#374151]">Happy Customers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">15+</div>
-              <div className="text-gray-600">Specialties</div>
+              <div className="text-3xl font-bold text-[#DB2777]">10+</div>
+              <div className="text-[#374151]">New Designs</div>
             </div>
           </div>
         </div>
@@ -426,7 +417,7 @@ const TailoringSkillsDisplay = () => {
 
                   {/* Category Badge */}
                   <div className="absolute top-6 right-6">
-                    <div className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
+                    <div className="bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
                       {skill.category}
                     </div>
                   </div>
@@ -438,8 +429,8 @@ const TailoringSkillsDisplay = () => {
                         onClick={() => toggleLike(skill.id)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md transition-all duration-300 transform hover:scale-110 ${
                           skill.isLiked
-                            ? "bg-purple-600/80 text-white"
-                            : "bg-white/20 text-white hover:bg-purple-600/60"
+                            ? "bg-pink-600/80 text-white"
+                            : "bg-white/20 text-white hover:bg-pink-600/60"
                         }`}
                       >
                         <Heart
@@ -458,9 +449,7 @@ const TailoringSkillsDisplay = () => {
 
                     <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-2 rounded-full text-white">
                       <MessageCircle className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        {skill.comments}
-                      </span>
+                      <span className="text-sm font-medium">{skill.comments}</span>
                     </div>
                   </div>
                 </div>
@@ -469,19 +458,17 @@ const TailoringSkillsDisplay = () => {
               {/* Content Section */}
               <div className="w-full lg:w-1/2 space-y-6">
                 <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+                  <h2 className="text-4xl md:text-5xl font-bold text-[#1F2937] leading-tight">
                     {skill.title}
                   </h2>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    {skill.description}
-                  </p>
+                  <p className="text-lg text-[#374151] leading-relaxed">{skill.description}</p>
 
                   {/* Specialties */}
                   <div className="flex flex-wrap gap-2">
                     {skill.specialties.map((specialty, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm font-medium"
                       >
                         {specialty}
                       </span>
@@ -490,21 +477,17 @@ const TailoringSkillsDisplay = () => {
                 </div>
 
                 {/* Tailor Info */}
-                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-purple-200/50 shadow-lg">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-pink-200/50 shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center shadow-lg">
                     <Scissors className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-800">
-                      {skill.username}
-                    </h3>
-                    <div className="flex items-center gap-2 text-purple-600 mt-1">
+                    <h3 className="text-xl font-bold text-[#1F2937]">{skill.username}</h3>
+                    <div className="flex items-center gap-2 text-pink-600 mt-1">
                       <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        {skill.address}
-                      </span>
+                      <span className="text-sm font-medium">{skill.address}</span>
                     </div>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-[#374151]">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {skill.experience}
@@ -519,11 +502,9 @@ const TailoringSkillsDisplay = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-4">
-                  <button className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 shadow-xl">
-                    Book Consultation
-                  </button>
-                  <button className="px-6 py-4 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold transition-all duration-300 hover:bg-purple-600 hover:text-white transform hover:scale-105">
-                    View Portfolio
+                  
+                  <button className="px-6 py-4 border border-pink-600 text-pink-600 rounded-xl font-semibold transition-all duration-300 hover:bg-pink-50 transform hover:scale-105">
+                    View Profile
                   </button>
                 </div>
               </div>
@@ -536,12 +517,10 @@ const TailoringSkillsDisplay = () => {
           <div className="text-center mt-20">
             <button
               onClick={handleShowMore}
-              className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
+              className="bg-pink-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-pink-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
             >
               <Users className="w-5 h-5" />
-              {isLoggedIn
-                ? "Show More Tailors"
-                : "Login to See More Premium Tailors"}
+              {isLoggedIn ? "Show More Tailors" : "Login to See More Premium Tailors"}
             </button>
           </div>
         )}
@@ -551,33 +530,30 @@ const TailoringSkillsDisplay = () => {
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform animate-scale-up">
-            <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-              Login Required
-            </h2>
-            <p className="text-gray-600 text-center mb-6">
-              Login to view all premium tailoring professionals and their
-              exclusive services.
+            <h2 className="text-3xl font-bold text-center mb-6 text-[#1F2937]">Login Required</h2>
+            <p className="text-[#374151] text-center mb-6">
+              Login to view all premium tailoring professionals and their exclusive services.
             </p>
             <div className="space-y-4">
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600"
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600"
               />
               <button
                 onClick={handleLogin}
-                className="w-full bg-gradient-to-r pink-50 to-pink-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700"
+                className="w-full bg-pink-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:bg-pink-700"
               >
                 Login & Continue
               </button>
               <button
                 onClick={() => setShowLoginModal(false)}
-                className="w-full text-gray-600 py-2 text-sm hover:text-gray-800 transition-colors"
+                className="w-full text-[#374151] py-2 text-sm hover:text-[#1F2937] transition-colors"
               >
                 Cancel
               </button>
@@ -588,35 +564,15 @@ const TailoringSkillsDisplay = () => {
 
       <style jsx>{`
         @keyframes slide-up {
-          from {
-            opacity: 0;
-            transform: translateY(60px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes scale-up {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
         }
-
-        .animate-slide-up {
-          animation: slide-up 0.8s ease-out forwards;
-          opacity: 0;
-        }
-
-        .animate-scale-up {
-          animation: scale-up 0.3s ease-out forwards;
-        }
+        .animate-slide-up { animation: slide-up 0.8s ease-out forwards; opacity: 0; }
+        .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
       `}</style>
     </div>
   );

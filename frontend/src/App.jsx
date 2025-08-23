@@ -8,16 +8,21 @@ import AdminPage from "./pages.jsx/AdminPage";
 import ProfilePage from "./pages.jsx/ProfilePage";
 import ProtectedRoute from "./pages.jsx/ProtectedRoute";
 import PostSkill from "./pages.jsx/PostSkill";
-import BabyCare from "./components/ServiceComponents/BabyCare";
-import Beauty from "./components/ServiceComponents/Beauty";
-import Fitness from "./components/ServiceComponents/fitness";
-import HomeDecoration from "./components/ServiceComponents/HemoDecoration";
-import HomeMadeProducts from "./components/ServiceComponents/HomeMadeProducts";
-import Photography from "./components/ServiceComponents/Photography";
-import Remoteworks from "./components/ServiceComponents/remoteworks";
+import Beauty1 from "./pages.jsx/TypesOfSkills/Beauty1";
+import Fitness1 from "./pages.jsx/TypesOfSkills/Fitness1";
+import Home1 from "./pages.jsx/TypesOfSkills/HomeDecoration1";
+import Home2 from "./pages.jsx/TypesOfSkills/HomeMadeProducts1";
+import Photo from "./pages.jsx/TypesOfSkills/Photos";
+import Work1 from "./pages.jsx/TypesOfSkills/RemoteWok";
 import ExploreSkills from "./pages.jsx/ExploreSkills";
 import AboutPage from "./pages.jsx/AboutPage";
 import ContactPage from "./pages.jsx/ContactPage";
+import Tailors1 from "./pages.jsx/TypesOfSkills/Tailors1";
+import BabyCare1 from "./pages.jsx/TypesOfSkills/BabyCare1";
+import Tutions1 from "./pages.jsx/TypesOfSkills/Tutions1";
+import Cookings from "./pages.jsx/TypesOfSkills/Cookings";
+import Skills from "./pages.jsx/skills";
+import Explore1 from "./pages.jsx/Explore1";
 
 function App() {
   return (
@@ -28,15 +33,20 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/explore" element={<ExploreSkills />} />
-        <Route path="/babycare" element={<BabyCare />} />
-        <Route path="/beauty" element={<Beauty />} />
-        <Route path="/fitness" element={<Fitness />} />
-        <Route path="/homedecoration" element={<HomeDecoration />} />
-        <Route path="/homeproducts" element={<HomeMadeProducts />} />
-        <Route path="/photo" element={<Photography />} />
-        <Route path="/remoteworks" element={<Remoteworks />} />
+        <Route path="/beauty" element={<Beauty1 />} />
+        <Route path="/fitness" element={<Fitness1 />} />
+        <Route path="/homedecoration" element={<Home1 />} />
+        <Route path="/homeproducts" element={<Home2 />} />
+        <Route path="/photo" element={<Photo />} />
+        <Route path="/remoteworks" element={<Work1 />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/tailoring" element={<Tailors1 />} />
+        <Route path="/tutoring" element={<Tutions1 />} />
+        <Route path="/cooking" element={<Cookings />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/babycare" element={<BabyCare1 />} />
+        <Route path="/skills" element={<Skills />} />
+        <Route path="/explore1" element={<Explore1 />} />
 
         {/* Protected routes */}
         <Route
@@ -56,6 +66,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/profile"
           element={

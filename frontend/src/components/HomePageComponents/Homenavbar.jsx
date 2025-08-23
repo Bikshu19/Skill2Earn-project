@@ -170,6 +170,20 @@ function Navbar() {
                   >
                     Post Skill
                   </Link>
+                  <Link
+                    to="/skills"
+                    onClick={() => setProfileOpen(false)}
+                    className="block px-4 py-2 text-gray-800 hover:bg-pink-100"
+                  >
+                    view skills
+                  </Link>
+                  <Link
+                    to="/explore1"
+                    onClick={() => setProfileOpen(false)}
+                    className="block px-4 py-2 text-gray-800 hover:bg-pink-100"
+                  >
+                    Explore skills
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100"

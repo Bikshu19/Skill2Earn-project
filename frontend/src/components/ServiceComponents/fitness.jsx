@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import {
   Heart,
   MapPin,
-  User,
-  Calendar,
   Eye,
   MessageCircle,
   Search,
-  Filter,
   Star,
   Scissors,
   Users,
@@ -22,231 +19,228 @@ const TailoringSkillsDisplay = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ id: 1 });
+  const [currentUser] = useState({ id: 1 });
 
-  // Mock tailoring data - replace with actual API calls
+  // Mock data: 10 items total — first 6 are public, last 4 are private (premium)
   const fetchTailoringSkills = async () => {
     try {
       setLoading(true);
 
-      // FOR PRODUCTION: Replace with actual API call
-      /*
-      const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/tailoring-skills', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-      const data = await response.json();
-      setSkills(data);
-      */
-
-      // DEMO DATA - 10 tailoring professionals
       const mockTailoringData = [
-{
-  id: 1,
-  title: "Certified Yoga Instructor",
-  description:
-    "Experienced yoga trainer specializing in Hatha and Vinyasa yoga. Helping students achieve flexibility, balance, and inner peace through guided sessions.",
-  image:
-    "https://images.unsplash.com/photo-1599447420773-9d65a8932f76?w=600&h=400&fit=crop",
-  username: "Ananya Sharma",
-  address: "Delhi, India",
-  category: "Yoga",
-  createdAt: "2024-01-20",
-  likes: 112,
-  isLiked: false,
-  views: 276,
-  comments: 34,
-  rating: 4.9,
-  experience: "9 years",
-  specialties: ["Hatha Yoga", "Vinyasa", "Meditation"],
-},
-{
-  id: 2,
-  title: "Personal Fitness Coach",
-  description:
-    "Certified personal trainer helping clients achieve weight loss, muscle gain, and overall fitness with customized workout plans.",
-  image:
-    "https://images.unsplash.com/photo-1558611848-73f7eb4001a1?w=600&h=400&fit=crop",
-  username: "Rahul Verma",
-  address: "Mumbai, India",
-  category: "Fitness",
-  createdAt: "2024-01-18",
-  likes: 98,
-  isLiked: true,
-  views: 245,
-  comments: 27,
-  rating: 4.8,
-  experience: "7 years",
-  specialties: ["Weight Training", "Cardio Fitness", "Nutrition Guidance"],
-},
-{
-  id: 3,
-  title: "Prenatal & Postnatal Yoga Specialist",
-  description:
-    "Helping new mothers with yoga routines tailored for pregnancy and recovery. Gentle stretches and breathing techniques for health and wellness.",
-  image:
-    "https://images.unsplash.com/photo-1588286840104-8957b019727f?w=600&h=400&fit=crop",
-  username: "Meera Iyer",
-  address: "Bangalore, India",
-  category: "Yoga",
-  createdAt: "2024-01-15",
-  likes: 87,
-  isLiked: false,
-  views: 212,
-  comments: 19,
-  rating: 4.9,
-  experience: "11 years",
-  specialties: ["Prenatal Yoga", "Postnatal Yoga", "Breathing Exercises"],
-},
-{
-  id: 4,
-  title: "Kids Yoga & Mindfulness Coach",
-  description:
-    "Specialized in yoga for children, combining fun activities with focus and mindfulness techniques for overall development.",
-  image:
-    "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=600&h=400&fit=crop",
-  username: "Priya Nair",
-  address: "Pune, India",
-  category: "Kids Yoga",
-  createdAt: "2024-01-12",
-  likes: 64,
-  isLiked: false,
-  views: 143,
-  comments: 14,
-  rating: 4.7,
-  experience: "6 years",
-  specialties: ["Kids Yoga", "Mindfulness", "Breathing Techniques"],
-},
-{
-  id: 5,
-  title: "Strength & Conditioning Trainer",
-  description:
-    "Professional fitness trainer offering high-intensity interval training (HIIT), functional fitness, and strength building programs.",
-  image:
-    "https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=600&h=400&fit=crop",
-  username: "Amit Kulkarni",
-  address: "Hyderabad, India",
-  category: "Fitness",
-  createdAt: "2024-01-10",
-  likes: 79,
-  isLiked: false,
-  views: 198,
-  comments: 22,
-  rating: 4.8,
-  experience: "8 years",
-  specialties: ["HIIT", "Strength Training", "Endurance"],
-},
-{
-  id: 6,
-  title: "Ashtanga Yoga Practitioner",
-  description:
-    "Specialist in Ashtanga and Power Yoga. Conducting online and offline classes for individuals and groups, focusing on strength and discipline.",
-  image:
-    "https://images.unsplash.com/photo-1599447420773-9d65a8932f76?w=600&h=400&fit=crop",
-  username: "Kiran Reddy",
-  address: "Chennai, India",
-  category: "Yoga",
-  createdAt: "2024-01-08",
-  likes: 92,
-  isLiked: true,
-  views: 234,
-  comments: 26,
-  rating: 4.8,
-  experience: "10 years",
-  specialties: ["Ashtanga Yoga", "Power Yoga", "Group Classes"],
-},
-// PREMIUM CONTENT
-{
-  id: 7,
-  title: "Luxury Wellness Retreat Instructor",
-  description:
-    "Hosting yoga and meditation retreats at luxury resorts. Personalized wellness programs for stress management and rejuvenation.",
-  image:
-    "https://images.unsplash.com/photo-1526401485004-2fda9f6d5f17?w=600&h=400&fit=crop",
-  username: "Radhika Sen",
-  address: "Goa, India",
-  category: "Yoga & Wellness",
-  createdAt: "2024-01-05",
-  likes: 176,
-  isLiked: false,
-  views: 465,
-  comments: 58,
-  rating: 5.0,
-  experience: "15 years",
-  specialties: ["Retreats", "Meditation", "Luxury Wellness"],
-  isPremium: true,
-},
-{
-  id: 8,
-  title: "Celebrity Fitness Trainer",
-  description:
-    "Personal fitness coach for celebrities and high-profile clients. Offering one-on-one training, diet plans, and lifestyle coaching.",
-  image:
-    "https://images.unsplash.com/photo-1583454110551-21f2fa3a1c78?w=600&h=400&fit=crop",
-  username: "Rohit Malhotra",
-  address: "Mumbai, India",
-  category: "Fitness",
-  createdAt: "2024-01-03",
-  likes: 143,
-  isLiked: true,
-  views: 389,
-  comments: 49,
-  rating: 5.0,
-  experience: "14 years",
-  specialties: ["Celebrity Training", "Diet Coaching", "Strength Programs"],
-  isPremium: true,
-},
-{
-  id: 9,
-  title: "Therapeutic Yoga Teacher",
-  description:
-    "Specializing in yoga for back pain, arthritis, and lifestyle diseases. Providing customized therapy sessions for better health.",
-  image:
-    "https://images.unsplash.com/photo-1594737626072-90a14f7d0c54?w=600&h=400&fit=crop",
-  username: "Sonal Jain",
-  address: "Ahmedabad, India",
-  category: "Therapeutic Yoga",
-  createdAt: "2024-01-01",
-  likes: 101,
-  isLiked: false,
-  views: 265,
-  comments: 32,
-  rating: 4.9,
-  experience: "13 years",
-  specialties: ["Therapy Yoga", "Lifestyle Diseases", "Healing Techniques"],
-  isPremium: true,
-},
-{
-  id: 10,
-  title: "Online Fitness & Yoga Coach",
-  description:
-    "Providing virtual fitness and yoga sessions for busy professionals. Flexible schedules with personal guidance via video calls.",
-  image:
-    "https://images.unsplash.com/photo-1554344728-77cf90d9ed26?w=600&h=400&fit=crop",
-  username: "Divya Kapoor",
-  address: "Noida, India",
-  category: "Online Fitness",
-  createdAt: "2023-12-28",
-  likes: 118,
-  isLiked: false,
-  views: 276,
-  comments: 38,
-  rating: 4.8,
-  experience: "9 years",
-  specialties: ["Online Coaching", "Yoga", "Work-from-home Fitness"],
-  isPremium: true,
-},
-];
+        {
+        id: 1,
+    title: "Personal Fitness Trainer",
+    description:
+      "Certified personal trainer specializing in strength training and body transformation.",
+    image:
+      "https://images.unsplash.com/photo-1571019613576-2b22c88a0ba1?w=600&h=400&fit=crop",
+    username: "Rahul Mehta",
+    address: "Delhi, India",
+    category: "Strength Training",
+    createdAt: "2024-01-20",
+    likes: 220,
+    isLiked: false,
+    views: 510,
+    comments: 65,
+    rating: 4.9,
+    experience: "10 years",
+    specialties: ["Weightlifting", "HIIT", "Bodybuilding"],
+    isPublic: true,
+        },
+        {
+         id: 2,
+    title: "Yoga Instructor",
+    description:
+      "Expert in Hatha and Vinyasa yoga, helping clients improve flexibility and mental well-being.",
+    image:
+      "https://images.unsplash.com/photo-1594737625785-c3f5a1b3e17b?w=600&h=400&fit=crop",
+    username: "Priya Sharma",
+    address: "Mumbai, India",
+    category: "Yoga",
+    createdAt: "2024-01-18",
+    likes: 140,
+    isLiked: true,
+    views: 340,
+    comments: 39,
+    rating: 4.8,
+    experience: "8 years",
+    specialties: ["Hatha Yoga", "Meditation", "Flexibility"],
+    isPublic: true,
+        },
+        {
+          id: 3,
+    title: "Zumba & Dance Fitness Coach",
+    description:
+      "Fun and energetic Zumba sessions to keep you fit while dancing.",
+    image:
+      "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=600&h=400&fit=crop",
+    username: "Ananya Gupta",
+    address: "Bangalore, India",
+    category: "Dance Fitness",
+    createdAt: "2024-01-15",
+    likes: 175,
+    isLiked: false,
+    views: 420,
+    comments: 52,
+    rating: 5.0,
+    experience: "6 years",
+    specialties: ["Zumba", "Cardio Dance", "Group Classes"],
+    isPublic: true,
+        },
+        {
+          id: 4,
+    title: "Nutrition & Diet Coach",
+    description:
+      "Certified nutritionist providing customized diet and meal planning for fitness goals.",
+    image:
+      "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&h=400&fit=crop",
+    username: "Simran Kaur",
+    address: "Chandigarh, India",
+    category: "Nutrition",
+    createdAt: "2024-01-12",
+    likes: 102,
+    isLiked: false,
+    views: 270,
+    comments: 31,
+    rating: 4.7,
+    experience: "5 years",
+    specialties: ["Weight Loss", "Keto Diet", "Vegan Nutrition"],
+    isPublic: true,
+        },
+        {
+           id: 5,
+    title: "CrossFit Coach",
+    description:
+      "High-intensity CrossFit training to build strength and endurance.",
+    image:
+      "https://images.unsplash.com/photo-1599058917212-d750089bc07d?w=600&h=400&fit=crop",
+    username: "Vikram Singh",
+    address: "Hyderabad, India",
+    category: "CrossFit",
+    createdAt: "2024-01-10",
+    likes: 130,
+    isLiked: false,
+    views: 300,
+    comments: 28,
+    rating: 4.8,
+    experience: "7 years",
+    specialties: ["Functional Training", "Endurance", "Cardio"],
+    isPublic: true,
+        },
+        {
+         id: 6,
+    title: "Pilates Instructor",
+    description:
+      "Certified Pilates trainer for posture correction, core strength, and mobility.",
+    image:
+      "https://images.unsplash.com/photo-1584467735815-f778f274e7d4?w=600&h=400&fit=crop",
+    username: "Aditi Verma",
+    address: "Pune, India",
+    category: "Pilates",
+    createdAt: "2024-01-08",
+    likes: 98,
+    isLiked: true,
+    views: 240,
+    comments: 25,
+    rating: 4.9,
+    experience: "4 years",
+    specialties: ["Pilates Mat", "Core Strength", "Flexibility"],
+    isPublic: true,
+        },
+        // PRIVATE / PREMIUM (4)
+        {
+         id: 7,
+    title: "Celebrity Fitness Trainer",
+    description:
+      "Trained Bollywood stars, offers exclusive one-on-one sessions.",
+    image:
+      "https://images.unsplash.com/photo-1583454110551-21f2a49e39d9?w=600&h=400&fit=crop",
+    username: "Rohit Shetty",
+    address: "Mumbai, India",
+    category: "Celebrity Training",
+    createdAt: "2024-01-05",
+    likes: 185,
+    isLiked: false,
+    views: 480,
+    comments: 70,
+    rating: 5.0,
+    experience: "12 years",
+    specialties: ["Strength", "Endurance", "HIIT"],
+    isPremium: true,
+    isPublic: false,
+        },
+        {
+          id: 8,
+    title: "Online Fitness Coach",
+    description:
+      "Virtual training sessions with live video workouts and progress tracking.",
+    image:
+      "https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=600&h=400&fit=crop",
+    username: "Sonia Kapoor",
+    address: "Online",
+    category: "Online Coaching",
+    createdAt: "2024-01-03",
+    likes: 115,
+    isLiked: false,
+    views: 260,
+    comments: 32,
+    rating: 4.9,
+    experience: "9 years",
+    specialties: ["Virtual Training", "Bodyweight Workouts", "Mobility"],
+    isPremium: true,
+    isPublic: false,
+        },
+        {
+           id: 9,
+    title: "Athletic Performance Coach",
+    description:
+      "Helps athletes with sports-specific training and conditioning.",
+    image:
+      "https://images.unsplash.com/photo-1593079830651-d4b0e2f91c76?w=600&h=400&fit=crop",
+    username: "Arjun Patel",
+    address: "Kolkata, India",
+    category: "Sports Fitness",
+    createdAt: "2024-01-01",
+    likes: 84,
+    isLiked: true,
+    views: 170,
+    comments: 23,
+    rating: 4.8,
+    experience: "11 years",
+    specialties: ["Speed", "Agility", "Strength"],
+    isPremium: true,
+    isPublic: false,
+        },
+        {
+          id: 10,
+    title: "Luxury Wellness Coach",
+    description:
+      "Premium holistic training with yoga, meditation, and nutrition plans.",
+    image:
+      "https://images.unsplash.com/photo-1594737625785-c3f5a1b3e17b?w=600&h=400&fit=crop",
+    username: "Neha Jain",
+    address: "Goa, India",
+    category: "Wellness",
+    createdAt: "2023-12-28",
+    likes: 150,
+    isLiked: false,
+    views: 320,
+    comments: 48,
+    rating: 4.9,
+    experience: "15 years",
+    specialties: ["Holistic Fitness", "Meditation", "Nutrition"],
+    isPremium: true,
+    isPublic: false,
+        },
+      ];
 
+      // Set all skills; show only public (first 6) initially
       setTimeout(() => {
         setSkills(mockTailoringData);
-        setDisplayedSkills(mockTailoringData.slice(0, 6)); // Show first 6
+        const publicSkills = mockTailoringData.filter((s) => s.isPublic);
+        setDisplayedSkills(publicSkills.slice(0, 6));
         setLoading(false);
-      }, 1200);
+      }, 800);
     } catch (error) {
       console.error("Error fetching skills:", error);
       setLoading(false);
@@ -255,30 +249,28 @@ const TailoringSkillsDisplay = () => {
 
   const toggleLike = async (skillId) => {
     try {
-      setSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
 
-      setDisplayedSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setDisplayedSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
     } catch (error) {
       console.error("Error toggling like:", error);
@@ -290,7 +282,7 @@ const TailoringSkillsDisplay = () => {
       setShowLoginModal(true);
     } else {
       setShowMore(true);
-      setDisplayedSkills(skills); // Show all skills
+      setDisplayedSkills(skills); // show all (public + private)
     }
   };
 
@@ -298,7 +290,7 @@ const TailoringSkillsDisplay = () => {
     setIsLoggedIn(true);
     setShowLoginModal(false);
     setShowMore(true);
-    setDisplayedSkills(skills); // Show all skills after login
+    setDisplayedSkills(skills); // after login show all
   };
 
   const filteredSkills = displayedSkills.filter(
@@ -311,25 +303,26 @@ const TailoringSkillsDisplay = () => {
 
   useEffect(() => {
     fetchTailoringSkills();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 p-6">
         <div className="max-w-7xl mx-auto space-y-8">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="animate-pulse">
               <div className="flex flex-col lg:flex-row gap-8 items-center">
-                <div className="w-full lg:w-96 h-64 bg-purple-200/50 rounded-3xl"></div>
+                <div className="w-full lg:w-96 h-64 bg-pink-200/50 rounded-3xl"></div>
                 <div className="flex-1 space-y-4">
-                  <div className="h-8 bg-purple-200/60 rounded w-3/4"></div>
-                  <div className="h-4 bg-purple-200/40 rounded"></div>
-                  <div className="h-4 bg-purple-200/40 rounded w-5/6"></div>
+                  <div className="h-8 bg-pink-200/60 rounded w-3/4"></div>
+                  <div className="h-4 bg-pink-200/40 rounded"></div>
+                  <div className="h-4 bg-pink-200/40 rounded w-5/6"></div>
                   <div className="flex gap-4 mt-6">
-                    <div className="w-12 h-12 bg-purple-200/60 rounded-full"></div>
+                    <div className="w-12 h-12 bg-pink-200/60 rounded-full"></div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-purple-200/50 rounded w-32"></div>
-                      <div className="h-3 bg-purple-200/40 rounded w-24"></div>
+                      <div className="h-4 bg-pink-200/50 rounded w-32"></div>
+                      <div className="h-3 bg-pink-200/40 rounded w-24"></div>
                     </div>
                   </div>
                 </div>
@@ -342,35 +335,34 @@ const TailoringSkillsDisplay = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-purple-200/40 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-pink-200/40 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative z-10 p-6">
         {/* Header */}
         <div className="max-w-7xl mx-auto text-center mb-16">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-gray-800">
-            Master <span className="text-purple-600">Tailors</span>
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-[#1F2937]">
+            Master <span className="text-[#DB2777]">Women</span> Fitness
           </h1>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed mb-8">
-            Discover skilled{" "}
-            <span className="text-purple-600">tailoring professionals</span> for
-            all your custom clothing needs
+          <p className="text-xl text-[#374151] max-w-2xl mx-auto leading-relaxed mb-8">
+            Discover skilled <span className="text-[#DB2777]">Fitness professionals</span> for
+            all your custom requirement needs
           </p>
 
           {/* Search Bar */}
           <div className="max-w-md mx-auto relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-purple-400" />
+              <Search className="h-5 w-5 text-[#DB2777]" />
             </div>
             <input
               type="text"
               placeholder="Search tailors, specialties, locations..."
-              className="w-full pl-10 pr-4 py-3 border-2 border-purple-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-white transition-all duration-300"
+              className="w-full pl-10 pr-4 py-3 border-2 border-pink-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-pink-600 focus:bg-white transition-all duration-300"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -379,18 +371,16 @@ const TailoringSkillsDisplay = () => {
           {/* Stats */}
           <div className="flex justify-center gap-8 mt-8">
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">
-                {skills.length}+
-              </div>
-              <div className="text-gray-600">Expert Tailors</div>
+              <div className="text-3xl font-bold text-[#DB2777]">{skills.length}+</div>
+              <div className="text-[#374151]">Expert Trainers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">50k+</div>
-              <div className="text-gray-600">Happy Customers</div>
+              <div className="text-3xl font-bold text-[#DB2777]">50+</div>
+              <div className="text-[#374151]">Happy Customers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">15+</div>
-              <div className="text-gray-600">Specialties</div>
+              <div className="text-3xl font-bold text-[#DB2777]">15+</div>
+              <div className="text-[#374151]">Equipments</div>
             </div>
           </div>
         </div>
@@ -427,7 +417,7 @@ const TailoringSkillsDisplay = () => {
 
                   {/* Category Badge */}
                   <div className="absolute top-6 right-6">
-                    <div className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
+                    <div className="bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
                       {skill.category}
                     </div>
                   </div>
@@ -439,8 +429,8 @@ const TailoringSkillsDisplay = () => {
                         onClick={() => toggleLike(skill.id)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md transition-all duration-300 transform hover:scale-110 ${
                           skill.isLiked
-                            ? "bg-purple-600/80 text-white"
-                            : "bg-white/20 text-white hover:bg-purple-600/60"
+                            ? "bg-pink-600/80 text-white"
+                            : "bg-white/20 text-white hover:bg-pink-600/60"
                         }`}
                       >
                         <Heart
@@ -459,9 +449,7 @@ const TailoringSkillsDisplay = () => {
 
                     <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-2 rounded-full text-white">
                       <MessageCircle className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        {skill.comments}
-                      </span>
+                      <span className="text-sm font-medium">{skill.comments}</span>
                     </div>
                   </div>
                 </div>
@@ -470,19 +458,17 @@ const TailoringSkillsDisplay = () => {
               {/* Content Section */}
               <div className="w-full lg:w-1/2 space-y-6">
                 <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+                  <h2 className="text-4xl md:text-5xl font-bold text-[#1F2937] leading-tight">
                     {skill.title}
                   </h2>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    {skill.description}
-                  </p>
+                  <p className="text-lg text-[#374151] leading-relaxed">{skill.description}</p>
 
                   {/* Specialties */}
                   <div className="flex flex-wrap gap-2">
                     {skill.specialties.map((specialty, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm font-medium"
                       >
                         {specialty}
                       </span>
@@ -491,21 +477,17 @@ const TailoringSkillsDisplay = () => {
                 </div>
 
                 {/* Tailor Info */}
-                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-purple-200/50 shadow-lg">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-pink-200/50 shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center shadow-lg">
                     <Scissors className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-800">
-                      {skill.username}
-                    </h3>
-                    <div className="flex items-center gap-2 text-purple-600 mt-1">
+                    <h3 className="text-xl font-bold text-[#1F2937]">{skill.username}</h3>
+                    <div className="flex items-center gap-2 text-pink-600 mt-1">
                       <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        {skill.address}
-                      </span>
+                      <span className="text-sm font-medium">{skill.address}</span>
                     </div>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-[#374151]">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {skill.experience}
@@ -520,11 +502,9 @@ const TailoringSkillsDisplay = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-4">
-                  <button className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 shadow-xl">
-                    Book Consultation
-                  </button>
-                  <button className="px-6 py-4 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold transition-all duration-300 hover:bg-purple-600 hover:text-white transform hover:scale-105">
-                    View Portfolio
+                  
+                  <button className="px-6 py-4 border border-pink-600 text-pink-600 rounded-xl font-semibold transition-all duration-300 hover:bg-pink-50 transform hover:scale-105">
+                    View Profile
                   </button>
                 </div>
               </div>
@@ -537,12 +517,10 @@ const TailoringSkillsDisplay = () => {
           <div className="text-center mt-20">
             <button
               onClick={handleShowMore}
-              className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
+              className="bg-pink-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-pink-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
             >
               <Users className="w-5 h-5" />
-              {isLoggedIn
-                ? "Show More Tailors"
-                : "Login to See More Premium Tailors"}
+              {isLoggedIn ? "Show More Tailors" : "Login to See More Premium Tailors"}
             </button>
           </div>
         )}
@@ -552,33 +530,30 @@ const TailoringSkillsDisplay = () => {
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform animate-scale-up">
-            <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-              Login Required
-            </h2>
-            <p className="text-gray-600 text-center mb-6">
-              Login to view all premium tailoring professionals and their
-              exclusive services.
+            <h2 className="text-3xl font-bold text-center mb-6 text-[#1F2937]">Login Required</h2>
+            <p className="text-[#374151] text-center mb-6">
+              Login to view all premium tailoring professionals and their exclusive services.
             </p>
             <div className="space-y-4">
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600"
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600"
               />
               <button
                 onClick={handleLogin}
-                className="w-full bg-gradient-to-r pink-50 to-pink-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700"
+                className="w-full bg-pink-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:bg-pink-700"
               >
                 Login & Continue
               </button>
               <button
                 onClick={() => setShowLoginModal(false)}
-                className="w-full text-gray-600 py-2 text-sm hover:text-gray-800 transition-colors"
+                className="w-full text-[#374151] py-2 text-sm hover:text-[#1F2937] transition-colors"
               >
                 Cancel
               </button>
@@ -589,40 +564,18 @@ const TailoringSkillsDisplay = () => {
 
       <style jsx>{`
         @keyframes slide-up {
-          from {
-            opacity: 0;
-            transform: translateY(60px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes scale-up {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
         }
-
-        .animate-slide-up {
-          animation: slide-up 0.8s ease-out forwards;
-          opacity: 0;
-        }
-
-        .animate-scale-up {
-          animation: scale-up 0.3s ease-out forwards;
-        }
+        .animate-slide-up { animation: slide-up 0.8s ease-out forwards; opacity: 0; }
+        .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
       `}</style>
     </div>
   );
 };
 
 export default TailoringSkillsDisplay;
-
-

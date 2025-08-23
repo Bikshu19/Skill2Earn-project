@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import {
   Heart,
   MapPin,
-  User,
-  Calendar,
   Eye,
   MessageCircle,
   Search,
-  Filter,
   Star,
   Scissors,
   Users,
@@ -22,231 +19,228 @@ const TailoringSkillsDisplay = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ id: 1 });
+  const [currentUser] = useState({ id: 1 });
 
-  // Mock tailoring data - replace with actual API calls
+  // Mock data: 10 items total — first 6 are public, last 4 are private (premium)
   const fetchTailoringSkills = async () => {
     try {
       setLoading(true);
 
-      // FOR PRODUCTION: Replace with actual API call
-      /*
-      const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/tailoring-skills', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-      const data = await response.json();
-      setSkills(data);
-      */
-
-      // DEMO DATA - 10 tailoring professionals
       const mockTailoringData = [
         {
           id: 1,
-          title: "Custom Wedding Dress Designer",
+          title: "Custom Dress Designer",
           description:
-            "Specializing in bespoke bridal wear with intricate beadwork and lace detailing. 15+ years creating dream wedding dresses with perfect fit and timeless elegance.",
+            "Creates bespoke dresses tailored to your style and measurements.",
           image:
-            "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1600185361597-4c4c1f8c1fa0?w=600&h=400&fit=crop",
           username: "Priya Sharma",
           address: "Delhi, India",
-          category: "Bridal Wear",
-          createdAt: "2024-01-20",
-          likes: 89,
+          category: "Tailoring / Stitching",
+          createdAt: "2024-03-10",
+          likes: 180,
           isLiked: false,
-          views: 245,
-          comments: 23,
-          rating: 4.9,
-          experience: "15 years",
-          specialties: ["Bridal Wear", "Evening Gowns", "Custom Fitting"],
+          views: 350,
+          comments: 28,
+          rating: 4.8,
+          experience: "6 years",
+          specialties: ["Evening Gowns", "Party Dresses", "Wedding Dresses"],
+          isPublic: true,
         },
         {
           id: 2,
-          title: "Men's Formal Suit Specialist",
+          title: "Blouse Stitching Expert",
           description:
-            "Expert in crafting premium men's suits with precision tailoring. From business suits to formal wear, delivering sophistication and comfort with every stitch.",
+            "Specializes in custom blouse designs and traditional stitching.",
           image:
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop",
-          username: "Rajesh Kumar",
+            "https://images.unsplash.com/photo-1591012911200-c73b80285d6c?w=600&h=400&fit=crop",
+          username: "Ananya Verma",
           address: "Mumbai, India",
-          category: "Men's Formal",
-          createdAt: "2024-01-18",
-          likes: 67,
+          category: "Tailoring / Stitching",
+          createdAt: "2024-03-08",
+          likes: 150,
           isLiked: true,
-          views: 189,
-          comments: 15,
-          rating: 4.8,
-          experience: "12 years",
-          specialties: ["Suits", "Blazers", "Corporate Wear"],
+          views: 300,
+          comments: 20,
+          rating: 4.7,
+          experience: "5 years",
+          specialties: ["Blouses", "Lehengas", "Saree Blouse Design"],
+          isPublic: true,
         },
         {
           id: 3,
-          title: "Traditional Saree Blouse Expert",
+          title: "Kids Wear Designer",
           description:
-            "Master of traditional saree blouse designs with modern fits. Specializing in silk saree blouses, designer patterns, and contemporary cuts for all occasions.",
+            "Designs comfortable and stylish clothing for children of all ages.",
           image:
-            "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&h=400&fit=crop",
-          username: "Meera Patel",
+            "https://images.unsplash.com/photo-1611599532232-69d5f231a342?w=600&h=400&fit=crop",
+          username: "Ritika Jain",
           address: "Bangalore, India",
-          category: "Traditional Wear",
-          createdAt: "2024-01-15",
-          likes: 124,
+          category: "Tailoring / Stitching",
+          createdAt: "2024-03-05",
+          likes: 140,
           isLiked: false,
-          views: 356,
-          comments: 41,
-          rating: 4.9,
-          experience: "18 years",
-          specialties: ["Saree Blouses", "Lehengas", "Salwar Suits"],
+          views: 270,
+          comments: 18,
+          rating: 4.6,
+          experience: "4 years",
+          specialties: ["Kids Dresses", "Casual Wear", "Party Wear"],
+          isPublic: true,
         },
         {
           id: 4,
-          title: "Children's Clothing Designer",
+          title: "Casual Wear Specialist",
           description:
-            "Creating comfortable and stylish clothing for kids. Specializing in school uniforms, party wear, and comfortable daily wear with child-friendly designs.",
+            "Expert in stitching and designing casual outfits for daily wear.",
           image:
-            "https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=600&h=400&fit=crop",
-          username: "Anjali Gupta",
+            "https://images.unsplash.com/photo-1610426613092-7d758f06bfe7?w=600&h=400&fit=crop",
+          username: "Sneha Kapoor",
           address: "Pune, India",
-          category: "Kids Wear",
-          createdAt: "2024-01-12",
-          likes: 56,
+          category: "Tailoring / Stitching",
+          createdAt: "2024-03-02",
+          likes: 130,
           isLiked: false,
-          views: 134,
-          comments: 18,
-          rating: 4.7,
-          experience: "8 years",
-          specialties: ["School Uniforms", "Party Wear", "Casual Wear"],
+          views: 250,
+          comments: 15,
+          rating: 4.5,
+          experience: "3 years",
+          specialties: ["Shirts", "Trousers", "Casual Sets"],
+          isPublic: true,
         },
         {
           id: 5,
-          title: "Alteration & Repair Specialist",
+          title: "Ethnic Wear Tailor",
           description:
-            "Expert in garment alterations and repairs. Quick turnaround time for hemming, resizing, and restoring damaged clothing to perfect condition.",
+            "Specializes in stitching ethnic outfits like sarees, kurtas, and lehengas.",
           image:
-            "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop",
-          username: "Mohammed Ali",
+            "https://images.unsplash.com/photo-1590608897129-79b81d5df1f3?w=600&h=400&fit=crop",
+          username: "Kavita Reddy",
           address: "Hyderabad, India",
-          category: "Alterations",
-          createdAt: "2024-01-10",
-          likes: 43,
-          isLiked: false,
-          views: 98,
-          comments: 12,
-          rating: 4.6,
-          experience: "10 years",
-          specialties: ["Alterations", "Repairs", "Resizing"],
+          category: "Tailoring / Stitching",
+          createdAt: "2024-02-28",
+          likes: 170,
+          isLiked: true,
+          views: 330,
+          comments: 22,
+          rating: 4.7,
+          experience: "7 years",
+          specialties: ["Sarees", "Kurtis", "Lehengas"],
+          isPublic: true,
         },
         {
           id: 6,
-          title: "Fashion Designer & Stylist",
+          title: "Luxury Tailoring Expert",
           description:
-            "Contemporary fashion designer creating trendy outfits for young professionals. Combining comfort with style for the modern wardrobe.",
+            "Provides premium tailoring services for weddings and events.",
           image:
-            "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=400&fit=crop",
-          username: "Neha Singh",
+            "https://images.unsplash.com/photo-1603031767641-42df2a17b0f1?w=600&h=400&fit=crop",
+          username: "Arjun Malhotra",
           address: "Chennai, India",
-          category: "Fashion Design",
-          createdAt: "2024-01-08",
-          likes: 78,
-          isLiked: true,
-          views: 167,
-          comments: 25,
-          rating: 4.8,
-          experience: "6 years",
-          specialties: ["Contemporary Wear", "Styling", "Trendy Outfits"],
+          category: "Tailoring / Stitching",
+          createdAt: "2024-02-25",
+          likes: 200,
+          isLiked: false,
+          views: 400,
+          comments: 30,
+          rating: 4.9,
+          experience: "10 years",
+          specialties: ["Wedding Dresses", "Custom Gowns", "Luxury Outfits"],
+          isPublic: true,
         },
-        // PREMIUM CONTENT - Requires Login
+
+        // PRIVATE / PREMIUM (4)
         {
           id: 7,
-          title: "Luxury Evening Wear Specialist",
+          title: "Designer Couture Specialist",
           description:
-            "High-end evening wear and cocktail dresses with premium fabrics and exclusive designs. Catering to elite clientele with personalized service.",
+            "Crafts high-end couture dresses and exclusive designer wear.",
           image:
-            "https://images.unsplash.com/photo-1566479179817-87b9a12906e1?w=600&h=400&fit=crop",
-          username: "Kavya Reddy",
-          address: "Gurgaon, India",
-          category: "Luxury Wear",
-          createdAt: "2024-01-05",
-          likes: 156,
-          isLiked: false,
-          views: 423,
-          comments: 67,
+            "https://images.unsplash.com/photo-1618220511955-fbcd9c44d76?w=600&h=400&fit=crop",
+          username: "Sonia Kapoor",
+          address: "Goa, India",
+          category: "Tailoring / Stitching",
+          createdAt: "2024-02-20",
+          likes: 220,
+          isLiked: true,
+          views: 450,
+          comments: 40,
           rating: 5.0,
-          experience: "20 years",
-          specialties: ["Evening Wear", "Cocktail Dresses", "Luxury Fabrics"],
+          experience: "12 years",
+          specialties: ["Couture Dresses", "Designer Wear", "Luxury Tailoring"],
           isPremium: true,
+          isPublic: false,
         },
         {
           id: 8,
-          title: "Ethnic Fusion Designer",
+          title: "Bridal Wear Expert",
           description:
-            "Blending traditional Indian wear with modern cuts. Creating unique fusion pieces that celebrate heritage while embracing contemporary style.",
+            "Designs and stitches exclusive bridal outfits with perfect fit.",
           image:
-            "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&h=400&fit=crop",
-          username: "Ravi Mehta",
+            "https://images.unsplash.com/photo-1595526114035-0d45e7abf0c6?w=600&h=400&fit=crop",
+          username: "Neha Jain",
           address: "Jaipur, India",
-          category: "Fusion Wear",
-          createdAt: "2024-01-03",
-          likes: 92,
-          isLiked: false,
-          views: 234,
-          comments: 31,
+          category: "Tailoring / Stitching",
+          createdAt: "2024-02-18",
+          likes: 210,
+          isLiked: true,
+          views: 430,
+          comments: 38,
           rating: 4.9,
           experience: "11 years",
-          specialties: ["Fusion Wear", "Indo-Western", "Ethnic Designs"],
+          specialties: ["Bridal Lehengas", "Custom Sarees", "Luxury Dresses"],
           isPremium: true,
+          isPublic: false,
         },
         {
           id: 9,
-          title: "Costume Designer for Theater",
+          title: "Men's Formal Wear Tailor",
           description:
-            "Professional costume designer for theater productions and cultural events. Expert in period costumes, character designs, and themed outfits.",
+            "Specializes in tailored suits, shirts, and formal menswear.",
           image:
-            "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=400&fit=crop",
-          username: "Sunita Joshi",
-          address: "Kolkata, India",
-          category: "Costume Design",
-          createdAt: "2024-01-01",
-          likes: 71,
-          isLiked: true,
-          views: 156,
-          comments: 28,
+            "https://images.unsplash.com/photo-1600607689863-1c3d04f43e3f?w=600&h=400&fit=crop",
+          username: "Ramesh Patel",
+          address: "Ahmedabad, India",
+          category: "Tailoring / Stitching",
+          createdAt: "2024-02-15",
+          likes: 180,
+          isLiked: false,
+          views: 390,
+          comments: 25,
           rating: 4.8,
-          experience: "14 years",
-          specialties: ["Theater Costumes", "Period Wear", "Character Design"],
+          experience: "9 years",
+          specialties: ["Suits", "Shirts", "Formal Wear"],
           isPremium: true,
+          isPublic: false,
         },
         {
           id: 10,
-          title: "Plus Size Fashion Specialist",
+          title: "Celebrity Costume Designer",
           description:
-            "Dedicated to creating beautiful, well-fitted clothing for plus-size individuals. Focusing on comfort, style, and confidence-building designs.",
+            "Designs exclusive costumes for film, theatre, and celebrity clients.",
           image:
-            "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&h=400&fit=crop",
-          username: "Deepa Nair",
-          address: "Kochi, India",
-          category: "Plus Size",
-          createdAt: "2023-12-28",
-          likes: 134,
-          isLiked: false,
-          views: 289,
-          comments: 45,
+            "https://images.unsplash.com/photo-1600585154340-1c3d04f43e3f?w=600&h=400&fit=crop",
+          username: "Vikram Rao",
+          address: "Mumbai, India",
+          category: "Tailoring / Stitching",
+          createdAt: "2024-02-12",
+          likes: 195,
+          isLiked: true,
+          views: 420,
+          comments: 32,
           rating: 4.9,
-          experience: "13 years",
-          specialties: ["Plus Size", "Comfort Fit", "Confidence Building"],
+          experience: "10 years",
+          specialties: ["Film Costumes", "Celebrity Outfits", "Custom Designs"],
           isPremium: true,
+          isPublic: false,
         },
       ];
-
+      // Set all skills; show only public (first 6) initially
       setTimeout(() => {
         setSkills(mockTailoringData);
-        setDisplayedSkills(mockTailoringData.slice(0, 6)); // Show first 6
+        const publicSkills = mockTailoringData.filter((s) => s.isPublic);
+        setDisplayedSkills(publicSkills.slice(0, 6));
         setLoading(false);
-      }, 1200);
+      }, 800);
     } catch (error) {
       console.error("Error fetching skills:", error);
       setLoading(false);
@@ -255,30 +249,28 @@ const TailoringSkillsDisplay = () => {
 
   const toggleLike = async (skillId) => {
     try {
-      setSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
 
-      setDisplayedSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setDisplayedSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
     } catch (error) {
       console.error("Error toggling like:", error);
@@ -290,7 +282,7 @@ const TailoringSkillsDisplay = () => {
       setShowLoginModal(true);
     } else {
       setShowMore(true);
-      setDisplayedSkills(skills); // Show all skills
+      setDisplayedSkills(skills); // show all (public + private)
     }
   };
 
@@ -298,7 +290,7 @@ const TailoringSkillsDisplay = () => {
     setIsLoggedIn(true);
     setShowLoginModal(false);
     setShowMore(true);
-    setDisplayedSkills(skills); // Show all skills after login
+    setDisplayedSkills(skills); // after login show all
   };
 
   const filteredSkills = displayedSkills.filter(
@@ -311,25 +303,26 @@ const TailoringSkillsDisplay = () => {
 
   useEffect(() => {
     fetchTailoringSkills();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 p-6">
         <div className="max-w-7xl mx-auto space-y-8">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="animate-pulse">
               <div className="flex flex-col lg:flex-row gap-8 items-center">
-                <div className="w-full lg:w-96 h-64 bg-purple-200/50 rounded-3xl"></div>
+                <div className="w-full lg:w-96 h-64 bg-pink-200/50 rounded-3xl"></div>
                 <div className="flex-1 space-y-4">
-                  <div className="h-8 bg-purple-200/60 rounded w-3/4"></div>
-                  <div className="h-4 bg-purple-200/40 rounded"></div>
-                  <div className="h-4 bg-purple-200/40 rounded w-5/6"></div>
+                  <div className="h-8 bg-pink-200/60 rounded w-3/4"></div>
+                  <div className="h-4 bg-pink-200/40 rounded"></div>
+                  <div className="h-4 bg-pink-200/40 rounded w-5/6"></div>
                   <div className="flex gap-4 mt-6">
-                    <div className="w-12 h-12 bg-purple-200/60 rounded-full"></div>
+                    <div className="w-12 h-12 bg-pink-200/60 rounded-full"></div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-purple-200/50 rounded w-32"></div>
-                      <div className="h-3 bg-purple-200/40 rounded w-24"></div>
+                      <div className="h-4 bg-pink-200/50 rounded w-32"></div>
+                      <div className="h-3 bg-pink-200/40 rounded w-24"></div>
                     </div>
                   </div>
                 </div>
@@ -342,35 +335,34 @@ const TailoringSkillsDisplay = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-purple-200/40 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-pink-200/40 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative z-10 p-6">
         {/* Header */}
         <div className="max-w-7xl mx-auto text-center mb-16">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-gray-800">
-            Master <span className="text-purple-600">Tailors</span>
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-[#1F2937]">
+            Master <span className="text-[#DB2777]">Women</span> Tailors
           </h1>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed mb-8">
-            Discover skilled{" "}
-            <span className="text-purple-600">tailoring professionals</span> for
-            all your custom clothing needs
+          <p className="text-xl text-[#374151] max-w-2xl mx-auto leading-relaxed mb-8">
+            Discover skilled <span className="text-[#DB2777]">Tailors</span> for
+            all your custom requirement needs
           </p>
 
           {/* Search Bar */}
           <div className="max-w-md mx-auto relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-purple-400" />
+              <Search className="h-5 w-5 text-[#DB2777]" />
             </div>
             <input
               type="text"
               placeholder="Search tailors, specialties, locations..."
-              className="w-full pl-10 pr-4 py-3 border-2 border-purple-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-white transition-all duration-300"
+              className="w-full pl-10 pr-4 py-3 border-2 border-pink-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-pink-600 focus:bg-white transition-all duration-300"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -379,18 +371,18 @@ const TailoringSkillsDisplay = () => {
           {/* Stats */}
           <div className="flex justify-center gap-8 mt-8">
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">
+              <div className="text-3xl font-bold text-[#DB2777]">
                 {skills.length}+
               </div>
-              <div className="text-gray-600">Expert Tailors</div>
+              <div className="text-[#374151]">Expertise Tailors</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">50k+</div>
-              <div className="text-gray-600">Happy Customers</div>
+              <div className="text-3xl font-bold text-[#DB2777]">50+</div>
+              <div className="text-[#374151]">Happy Customers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">15+</div>
-              <div className="text-gray-600">Specialties</div>
+              <div className="text-3xl font-bold text-[#DB2777]">10+</div>
+              <div className="text-[#374151]">New Designs</div>
             </div>
           </div>
         </div>
@@ -427,7 +419,7 @@ const TailoringSkillsDisplay = () => {
 
                   {/* Category Badge */}
                   <div className="absolute top-6 right-6">
-                    <div className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
+                    <div className="bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
                       {skill.category}
                     </div>
                   </div>
@@ -439,8 +431,8 @@ const TailoringSkillsDisplay = () => {
                         onClick={() => toggleLike(skill.id)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md transition-all duration-300 transform hover:scale-110 ${
                           skill.isLiked
-                            ? "bg-purple-600/80 text-white"
-                            : "bg-white/20 text-white hover:bg-purple-600/60"
+                            ? "bg-pink-600/80 text-white"
+                            : "bg-white/20 text-white hover:bg-pink-600/60"
                         }`}
                       >
                         <Heart
@@ -470,10 +462,10 @@ const TailoringSkillsDisplay = () => {
               {/* Content Section */}
               <div className="w-full lg:w-1/2 space-y-6">
                 <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+                  <h2 className="text-4xl md:text-5xl font-bold text-[#1F2937] leading-tight">
                     {skill.title}
                   </h2>
-                  <p className="text-lg text-gray-600 leading-relaxed">
+                  <p className="text-lg text-[#374151] leading-relaxed">
                     {skill.description}
                   </p>
 
@@ -482,7 +474,7 @@ const TailoringSkillsDisplay = () => {
                     {skill.specialties.map((specialty, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm font-medium"
                       >
                         {specialty}
                       </span>
@@ -491,21 +483,21 @@ const TailoringSkillsDisplay = () => {
                 </div>
 
                 {/* Tailor Info */}
-                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-purple-200/50 shadow-lg">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-pink-200/50 shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center shadow-lg">
                     <Scissors className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-800">
+                    <h3 className="text-xl font-bold text-[#1F2937]">
                       {skill.username}
                     </h3>
-                    <div className="flex items-center gap-2 text-purple-600 mt-1">
+                    <div className="flex items-center gap-2 text-pink-600 mt-1">
                       <MapPin className="w-4 h-4" />
                       <span className="text-sm font-medium">
                         {skill.address}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-[#374151]">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {skill.experience}
@@ -520,11 +512,8 @@ const TailoringSkillsDisplay = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-4">
-                  <button className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 shadow-xl">
-                    Book Consultation
-                  </button>
-                  <button className="px-6 py-4 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold transition-all duration-300 hover:bg-purple-600 hover:text-white transform hover:scale-105">
-                    View Portfolio
+                  <button className="px-6 py-4 border border-pink-600 text-pink-600 rounded-xl font-semibold transition-all duration-300 hover:bg-pink-50 transform hover:scale-105">
+                    View Profile
                   </button>
                 </div>
               </div>
@@ -537,55 +526,18 @@ const TailoringSkillsDisplay = () => {
           <div className="text-center mt-20">
             <button
               onClick={handleShowMore}
-              className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
+              className="bg-pink-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-pink-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
             >
               <Users className="w-5 h-5" />
-              {isLoggedIn
-                ? "Show More Tailors"
-                : "Login to See More Premium Tailors"}
+              {isLoggedIn ? (
+                "Show More Tailors"
+              ) : (
+                <a href="/login">"Login to See More Premium Tailors"</a>
+              )}
             </button>
           </div>
         )}
       </div>
-
-      {/* Login Modal */}
-      {showLoginModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform animate-scale-up">
-            <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-              Login Required
-            </h2>
-            <p className="text-gray-600 text-center mb-6">
-              Login to view all premium tailoring professionals and their
-              exclusive services.
-            </p>
-            <div className="space-y-4">
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <button
-                onClick={handleLogin}
-                className="w-full bg-gradient-to-r pink-50 to-pink-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700"
-              >
-                Login & Continue
-              </button>
-              <button
-                onClick={() => setShowLoginModal(false)}
-                className="w-full text-gray-600 py-2 text-sm hover:text-gray-800 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <style jsx>{`
         @keyframes slide-up {
@@ -598,7 +550,6 @@ const TailoringSkillsDisplay = () => {
             transform: translateY(0);
           }
         }
-
         @keyframes scale-up {
           from {
             opacity: 0;
@@ -609,12 +560,10 @@ const TailoringSkillsDisplay = () => {
             transform: scale(1);
           }
         }
-
         .animate-slide-up {
           animation: slide-up 0.8s ease-out forwards;
           opacity: 0;
         }
-
         .animate-scale-up {
           animation: scale-up 0.3s ease-out forwards;
         }

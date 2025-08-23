@@ -211,13 +211,9 @@ const createUserDetails = async (req, res) => {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log("Decoded token:", decoded);
-    console.log("Request body:", req.body);
-
     const { location, address, pincode, mobileNumber, whatsappNumber } =
       req.body;
 
-    // Basic validation
     if (!location || !address || !pincode || !mobileNumber || !whatsappNumber) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -225,10 +221,9 @@ const createUserDetails = async (req, res) => {
     if (!decoded.id) {
       return res
         .status(401)
-        .json({ message: "Invalid token payload: missing user ID" });
+        .json({ message: "Invalid token payload: missing ID" });
     }
 
-    // Check if details already exist (optional: you might want to allow updates here or separate update route)
     const existing = await User.findById(decoded.id).select(
       "location address pincode mobileNumber whatsappNumber"
     );
@@ -236,15 +231,15 @@ const createUserDetails = async (req, res) => {
       existing &&
       existing.location &&
       existing.address &&
+      existing.pincode &&
       existing.mobileNumber &&
       existing.whatsappNumber
     ) {
-      return res.status(400).json({
-        message: "Details already exist. Use update endpoint instead.",
-      });
+      return res
+        .status(400)
+        .json({ message: "Details already exist. Use update endpoint." });
     }
 
-    // Save details on user document
     const updatedUser = await User.findByIdAndUpdate(
       decoded.id,
       { location, address, pincode, mobileNumber, whatsappNumber },
@@ -259,10 +254,8 @@ const createUserDetails = async (req, res) => {
       userDetails: updatedUser,
     });
   } catch (error) {
-    console.error("Create user details error:", error);
-    res
-      .status(500)
-      .json({ message: error.message || "Server error while saving details" });
+    console.error(error);
+    res.status(500).json({ message: error.message || "Server error" });
   }
 };
 
@@ -275,32 +268,30 @@ const updateUserDetails = async (req, res) => {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const { location, address, pincode, mobilenumber, whatsappnumber } =
+    const { location, address, pincode, mobileNumber, whatsappNumber } =
       req.body;
 
-    if (!location && !address && !pincode && !mobilenumber && !whatsappnumber) {
+    if (!location && !address && !pincode && !mobileNumber && !whatsappNumber) {
       return res
         .status(400)
         .json({ message: "At least one field is required to update" });
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      decoded.id,
-      // Only include fields that are present in req.body
-      {
-        ...(location && { location }),
-        ...(address && { address }),
-        ...(pincode && { pincode }),
-        ...(mobilenumber && { mobilenumber }),
-        ...(whatsappnumber && { whatsappnumber }),
-      },
-      { new: true, runValidators: true }
-    );
+    const updateFields = {
+      ...(location && { location }),
+      ...(address && { address }),
+      ...(pincode && { pincode }),
+      ...(mobileNumber && { mobileNumber }),
+      ...(whatsappNumber && { whatsappNumber }),
+    };
+
+    const updatedUser = await User.findByIdAndUpdate(decoded.id, updateFields, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedUser) {
-      return res
-        .status(404)
-        .json({ message: "User details not found. Use create instead." });
+      return res.status(404).json({ message: "User not found" });
     }
 
     res.status(200).json({
@@ -308,11 +299,10 @@ const updateUserDetails = async (req, res) => {
       userDetails: updatedUser,
     });
   } catch (error) {
-    console.error("Update user details error:", error);
-    res.status(500).json({ message: "Server error while updating details" });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
 const addSkillToUser = async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -627,6 +617,56 @@ const getUserContactInfo = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getSkillsByEmail = async (req, res) => {
+  try {
+    const email = req.query.email; // get email from query
+
+    if (!email) {
+      return res
+        .status(400)
+        .json({ message: "Email query parameter is required." });
+    }
+
+    const user = await User.findOne({ email }).select("username works").lean();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    return res.json({
+      username: user.username,
+      works: user.works || [],
+    });
+  } catch (error) {
+    console.error("Error fetching skills by email:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+async function getUsersWithWorks(req, res) {
+  try {
+    // Find users where the works array has at least one item
+    const users = await User.find({ "works.0": { $exists: true } })
+      .select(
+        "username gender email mobileNumber whatsappNumber address location pincode role works"
+      )
+      .lean();
+
+    // For each user, map over their works to keep only category, subcategory, and image
+    const filtered = users.map((user) => ({
+      ...user,
+      works: (user.works || []).map((work) => ({
+        category: work.category,
+        subcategory: work.subcategory,
+        image: work.image, // this is an array
+      })),
+    }));
+
+    return res.json(filtered);
+  } catch (error) {
+    console.error("Error fetching users with works:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
 
 module.exports = {
   registerUser,
@@ -646,4 +686,6 @@ module.exports = {
   updateRequestStatus,
   getRequestsForWork,
   manualSendEmail,
+  getSkillsByEmail,
+  getUsersWithWorks,
 };

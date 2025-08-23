@@ -20,9 +20,13 @@ const {
   updateRequestStatus,
   getRequestsForWork,
   manualSendEmail,
+  getSkillsByEmail,
+  getUsersWithWorks,
 } = require("../controllers/usercontroller");
 
 // Requests
+router.get("/users-with-works", getUsersWithWorks);
+router.get("/skills", getSkillsByEmail);
 router.post("/works/request", sendRequest);
 router.put("/works/request/:action", updateRequestStatus);
 router.get("/users/:ownerId/works/:workId/requests", getRequestsForWork);

@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import {
   Heart,
   MapPin,
-  User,
-  Calendar,
   Eye,
   MessageCircle,
   Search,
-  Filter,
   Star,
   Scissors,
   Users,
@@ -22,231 +19,229 @@ const TailoringSkillsDisplay = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showMore, setShowMore] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ id: 1 });
+  const [currentUser] = useState({ id: 1 });
 
-  // Mock tailoring data - replace with actual API calls
+  // Mock data: 10 items total — first 6 are public, last 4 are private (premium)
   const fetchTailoringSkills = async () => {
     try {
       setLoading(true);
 
-      // FOR PRODUCTION: Replace with actual API call
-      /*
-      const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/tailoring-skills', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-      });
-      const data = await response.json();
-      setSkills(data);
-      */
-
-      // DEMO DATA - 10 tailoring professionals
-      const mockTailoringData = [
+      const mockTailoringData =[
   {
-  id: 1,
-  title: "Data Entry Specialist",
-  description:
-    "Fast and accurate data entry expert with over 12 years of experience. Skilled in MS Excel, Google Sheets, and database management for businesses and startups.",
-  image:
-    "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=600&h=400&fit=crop",
-  username: "Ravi Kumar",
-  address: "Delhi, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-20",
-  likes: 95,
-  isLiked: false,
-  views: 220,
-  comments: 17,
-  rating: 4.9,
-  experience: "12 years",
-  specialties: ["Data Entry", "Excel", "Database Management"],
-},
-{
-  id: 2,
-  title: "Freelance Content Writer",
-  description:
-    "Creative freelance writer specializing in blogs, website content, and SEO-friendly articles. Helping brands tell their story with impactful words.",
-  image:
-    "https://images.unsplash.com/photo-1504691342899-4d92b50853e8?w=600&h=400&fit=crop",
-  username: "Ayesha Khan",
-  address: "Mumbai, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-18",
-  likes: 78,
-  isLiked: true,
-  views: 190,
-  comments: 22,
-  rating: 4.8,
-  experience: "8 years",
-  specialties: ["Blog Writing", "SEO Articles", "Website Content"],
-},
-{
-  id: 3,
-  title: "Virtual Assistant",
-  description:
-    "Efficient virtual assistant managing schedules, emails, and client communication. Trusted by entrepreneurs for productivity and smooth operations.",
-  image:
-    "https://images.unsplash.com/photo-1584697964403-9e98f0cf3440?w=600&h=400&fit=crop",
-  username: "Neha Sharma",
-  address: "Bangalore, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-15",
-  likes: 132,
-  isLiked: false,
-  views: 350,
-  comments: 40,
-  rating: 4.9,
-  experience: "10 years",
-  specialties: ["Virtual Assistance", "Email Handling", "Scheduling"],
-},
-{
-  id: 4,
-  title: "Social Media Manager",
-  description:
-    "Managing Instagram, Facebook, and LinkedIn accounts for small businesses. Specialized in increasing engagement and running ad campaigns.",
-  image:
-    "https://images.unsplash.com/photo-1557838923-2985c318be48?w=600&h=400&fit=crop",
-  username: "Arjun Mehta",
-  address: "Hyderabad, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-12",
-  likes: 88,
-  isLiked: false,
-  views: 210,
-  comments: 19,
-  rating: 4.7,
-  experience: "7 years",
-  specialties: ["Instagram Marketing", "Ad Campaigns", "Engagement Growth"],
-},
-{
-  id: 5,
-  title: "Freelance Graphic Designer",
-  description:
-    "Passionate graphic designer creating logos, brand kits, and social media creatives. Worked with 200+ small businesses worldwide.",
-  image:
-    "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&h=400&fit=crop",
-  username: "Simran Kaur",
-  address: "Chandigarh, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-10",
-  likes: 103,
-  isLiked: false,
-  views: 260,
-  comments: 29,
-  rating: 4.8,
-  experience: "9 years",
-  specialties: ["Logo Design", "Social Media Creatives", "Branding"],
-},
-{
-  id: 6,
-  title: "Freelance Copywriter",
-  description:
-    "Expert in writing persuasive ad copies, sales pages, and product descriptions that drive conversions and sales.",
-  image:
-    "https://images.unsplash.com/photo-1522199710521-72d69614c702?w=600&h=400&fit=crop",
-  username: "Mohit Verma",
-  address: "Chennai, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-08",
-  likes: 64,
-  isLiked: true,
-  views: 150,
-  comments: 14,
-  rating: 4.8,
-  experience: "6 years",
-  specialties: ["Copywriting", "Ad Copy", "Product Descriptions"],
-},
-// PREMIUM CONTENT
-{
-  id: 7,
-  title: "SEO & Digital Marketing Expert",
-  description:
-    "Helping startups grow online with SEO optimization, keyword research, and marketing strategies. Increased organic traffic by 300% for clients.",
-  image:
-    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop",
-  username: "Rahul Jain",
-  address: "Gurgaon, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-05",
-  likes: 154,
-  isLiked: false,
-  views: 420,
-  comments: 55,
-  rating: 5.0,
-  experience: "11 years",
-  specialties: ["SEO", "Digital Marketing", "Keyword Research"],
-  isPremium: true,
-},
-{
-  id: 8,
-  title: "Freelance Video Editor",
-  description:
-    "Skilled video editor for YouTube, Instagram reels, and ads. Delivering engaging videos with modern editing techniques.",
-  image:
-    "https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=600&h=400&fit=crop",
-  username: "Ananya Das",
-  address: "Kolkata, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-03",
-  likes: 112,
-  isLiked: false,
-  views: 300,
-  comments: 38,
-  rating: 4.9,
-  experience: "8 years",
-  specialties: ["Video Editing", "YouTube Videos", "Reels"],
-  isPremium: true,
-},
-{
-  id: 9,
-  title: "UI/UX Designer (Freelance)",
-  description:
-    "Designing beautiful and user-friendly websites and apps. Focused on wireframes, mockups, and prototypes for startups and businesses.",
-  image:
-    "https://images.unsplash.com/photo-1559027615-ce3c1ca5d995?w=600&h=400&fit=crop",
-  username: "Ishita Roy",
-  address: "Pune, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2024-01-01",
-  likes: 97,
-  isLiked: true,
-  views: 200,
-  comments: 27,
-  rating: 4.8,
-  experience: "9 years",
-  specialties: ["UI/UX Design", "Prototypes", "Wireframes"],
-  isPremium: true,
-},
-{
-  id: 10,
-  title: "Freelance Translator",
-  description:
-    "Professional translator fluent in English, Hindi, and French. Offering document translation, subtitles, and business communication services.",
-  image:
-    "https://images.unsplash.com/photo-1498079022511-d15614cb1c02?w=600&h=400&fit=crop",
-  username: "Pooja Nair",
-  address: "Kerala, India",
-  category: "Remote Work / Freelancing",
-  createdAt: "2023-12-28",
-  likes: 121,
-  isLiked: false,
-  views: 275,
-  comments: 33,
-  rating: 4.9,
-  experience: "14 years",
-  specialties: ["Translation", "Subtitles", "Business Communication"],
-  isPremium: true,
-},
+    id: 1,
+    title: "Freelance Web Developer",
+    description:
+      "Builds responsive and scalable websites using modern frameworks.",
+    image:
+      "https://images.unsplash.com/photo-1529101091764-c3526daf38fe?w=600&h=400&fit=crop",
+    username: "Rahul Mehta",
+    address: "Remote - India",
+    category: "Web Development",
+    createdAt: "2024-02-15",
+    likes: 210,
+    isLiked: false,
+    views: 420,
+    comments: 32,
+    rating: 4.8,
+    experience: "6 years",
+    specialties: ["React", "Next.js", "Node.js"],
+    isPublic: true,
+  },
+  {
+    id: 2,
+    title: "Remote Graphic Designer",
+    description:
+      "Creates stunning brand designs, digital ads, and UI/UX graphics.",
+    image:
+      "https://images.unsplash.com/photo-1504691342899-9ca49e0a91ee?w=600&h=400&fit=crop",
+    username: "Pooja Sharma",
+    address: "Remote - India",
+    category: "Graphic Design",
+    createdAt: "2024-02-12",
+    likes: 175,
+    isLiked: true,
+    views: 380,
+    comments: 28,
+    rating: 4.7,
+    experience: "5 years",
+    specialties: ["Adobe Illustrator", "Figma", "Brand Identity"],
+    isPublic: true,
+  },
+  {
+    id: 3,
+    title: "Content Writer",
+    description:
+      "Specializes in SEO blogs, website content, and technical documentation.",
+    image:
+      "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=600&h=400&fit=crop",
+    username: "Ankit Verma",
+    address: "Remote - India",
+    category: "Content Writing",
+    createdAt: "2024-02-10",
+    likes: 190,
+    isLiked: false,
+    views: 340,
+    comments: 22,
+    rating: 4.6,
+    experience: "4 years",
+    specialties: ["SEO Writing", "Copywriting", "Technical Content"],
+    isPublic: true,
+  },
+  {
+    id: 4,
+    title: "Remote Data Analyst",
+    description:
+      "Helps businesses analyze and visualize data for better decisions.",
+    image:
+      "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=600&h=400&fit=crop",
+    username: "Sneha Iyer",
+    address: "Remote - India",
+    category: "Data Analysis",
+    createdAt: "2024-02-08",
+    likes: 160,
+    isLiked: false,
+    views: 300,
+    comments: 19,
+    rating: 4.7,
+    experience: "5 years",
+    specialties: ["Power BI", "Tableau", "SQL"],
+    isPublic: true,
+  },
+  {
+    id: 5,
+    title: "Virtual Assistant",
+    description:
+      "Provides admin support, email management, and scheduling services remotely.",
+    image:
+      "https://images.unsplash.com/photo-1581092334651-ddf636977d4f?w=600&h=400&fit=crop",
+    username: "Ritika Singh",
+    address: "Remote - India",
+    category: "Admin Support",
+    createdAt: "2024-02-05",
+    likes: 145,
+    isLiked: true,
+    views: 280,
+    comments: 17,
+    rating: 4.5,
+    experience: "3 years",
+    specialties: ["Email Handling", "Scheduling", "Customer Support"],
+    isPublic: true,
+  },
+  {
+    id: 6,
+    title: "Remote Digital Marketer",
+    description:
+      "Helps businesses grow through SEO, ads, and social media campaigns.",
+    image:
+      "https://images.unsplash.com/photo-1508830524289-0adcbe822b40?w=600&h=400&fit=crop",
+    username: "Amit Sharma",
+    address: "Remote - India",
+    category: "Digital Marketing",
+    createdAt: "2024-02-02",
+    likes: 200,
+    isLiked: false,
+    views: 410,
+    comments: 29,
+    rating: 4.8,
+    experience: "7 years",
+    specialties: ["SEO", "Facebook Ads", "Google Analytics"],
+    isPublic: true,
+  },
+
+  // PRIVATE / PREMIUM (4)
+  {
+    id: 7,
+    title: "AI/ML Engineer",
+    description:
+      "Builds machine learning models and AI solutions for businesses.",
+    image:
+      "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
+    username: "Vikram Rao",
+    address: "Remote - India",
+    category: "AI & Machine Learning",
+    createdAt: "2024-01-28",
+    likes: 220,
+    isLiked: true,
+    views: 520,
+    comments: 41,
+    rating: 4.9,
+    experience: "8 years",
+    specialties: ["Deep Learning", "Python", "NLP"],
+    isPremium: true,
+    isPublic: false,
+  },
+  {
+    id: 8,
+    title: "Remote Blockchain Developer",
+    description:
+      "Creates decentralized applications and smart contracts on Ethereum & Solana.",
+    image:
+      "https://images.unsplash.com/photo-1621451537084-482c7301c57c?w=600&h=400&fit=crop",
+    username: "Neha Agarwal",
+    address: "Remote - India",
+    category: "Blockchain",
+    createdAt: "2024-01-25",
+    likes: 180,
+    isLiked: false,
+    views: 460,
+    comments: 33,
+    rating: 4.8,
+    experience: "6 years",
+    specialties: ["Smart Contracts", "Ethereum", "Web3"],
+    isPremium: true,
+    isPublic: false,
+  },
+  {
+    id: 9,
+    title: "Cloud Solutions Architect",
+    description:
+      "Designs cloud-based infrastructure and remote DevOps pipelines.",
+    image:
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop",
+    username: "Karan Patel",
+    address: "Remote - India",
+    category: "Cloud Computing",
+    createdAt: "2024-01-20",
+    likes: 195,
+    isLiked: false,
+    views: 480,
+    comments: 36,
+    rating: 4.9,
+    experience: "10 years",
+    specialties: ["AWS", "Azure", "DevOps"],
+    isPremium: true,
+    isPublic: false,
+  },
+  {
+    id: 10,
+    title: "Cybersecurity Specialist",
+    description:
+      "Protects businesses from online threats with secure remote monitoring.",
+    image:
+      "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=600&h=400&fit=crop",
+    username: "Sanjana Rao",
+    address: "Remote - India",
+    category: "Cybersecurity",
+    createdAt: "2024-01-15",
+    likes: 170,
+    isLiked: true,
+    views: 430,
+    comments: 30,
+    rating: 4.8,
+    experience: "9 years",
+    specialties: ["Network Security", "Pen Testing", "Cloud Security"],
+    isPremium: true,
+    isPublic: false,
+  },
 ];
 
+      // Set all skills; show only public (first 6) initially
       setTimeout(() => {
         setSkills(mockTailoringData);
-        setDisplayedSkills(mockTailoringData.slice(0, 6)); // Show first 6
+        const publicSkills = mockTailoringData.filter((s) => s.isPublic);
+        setDisplayedSkills(publicSkills.slice(0, 6));
         setLoading(false);
-      }, 1200);
+      }, 800);
     } catch (error) {
       console.error("Error fetching skills:", error);
       setLoading(false);
@@ -255,30 +250,28 @@ const TailoringSkillsDisplay = () => {
 
   const toggleLike = async (skillId) => {
     try {
-      setSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
 
-      setDisplayedSkills((prevSkills) =>
-        prevSkills.map((skill) => {
-          if (skill.id === skillId) {
-            return {
-              ...skill,
-              isLiked: !skill.isLiked,
-              likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
-            };
-          }
-          return skill;
-        })
+      setDisplayedSkills((prev) =>
+        prev.map((skill) =>
+          skill.id === skillId
+            ? {
+                ...skill,
+                isLiked: !skill.isLiked,
+                likes: skill.isLiked ? skill.likes - 1 : skill.likes + 1,
+              }
+            : skill
+        )
       );
     } catch (error) {
       console.error("Error toggling like:", error);
@@ -290,7 +283,7 @@ const TailoringSkillsDisplay = () => {
       setShowLoginModal(true);
     } else {
       setShowMore(true);
-      setDisplayedSkills(skills); // Show all skills
+      setDisplayedSkills(skills); // show all (public + private)
     }
   };
 
@@ -298,7 +291,7 @@ const TailoringSkillsDisplay = () => {
     setIsLoggedIn(true);
     setShowLoginModal(false);
     setShowMore(true);
-    setDisplayedSkills(skills); // Show all skills after login
+    setDisplayedSkills(skills); // after login show all
   };
 
   const filteredSkills = displayedSkills.filter(
@@ -311,25 +304,26 @@ const TailoringSkillsDisplay = () => {
 
   useEffect(() => {
     fetchTailoringSkills();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 p-6">
         <div className="max-w-7xl mx-auto space-y-8">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="animate-pulse">
               <div className="flex flex-col lg:flex-row gap-8 items-center">
-                <div className="w-full lg:w-96 h-64 bg-purple-200/50 rounded-3xl"></div>
+                <div className="w-full lg:w-96 h-64 bg-pink-200/50 rounded-3xl"></div>
                 <div className="flex-1 space-y-4">
-                  <div className="h-8 bg-purple-200/60 rounded w-3/4"></div>
-                  <div className="h-4 bg-purple-200/40 rounded"></div>
-                  <div className="h-4 bg-purple-200/40 rounded w-5/6"></div>
+                  <div className="h-8 bg-pink-200/60 rounded w-3/4"></div>
+                  <div className="h-4 bg-pink-200/40 rounded"></div>
+                  <div className="h-4 bg-pink-200/40 rounded w-5/6"></div>
                   <div className="flex gap-4 mt-6">
-                    <div className="w-12 h-12 bg-purple-200/60 rounded-full"></div>
+                    <div className="w-12 h-12 bg-pink-200/60 rounded-full"></div>
                     <div className="space-y-2">
-                      <div className="h-4 bg-purple-200/50 rounded w-32"></div>
-                      <div className="h-3 bg-purple-200/40 rounded w-24"></div>
+                      <div className="h-4 bg-pink-200/50 rounded w-32"></div>
+                      <div className="h-3 bg-pink-200/40 rounded w-24"></div>
                     </div>
                   </div>
                 </div>
@@ -342,35 +336,34 @@ const TailoringSkillsDisplay = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50/80 via-pink-100/60 to-purple-100/70 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-purple-200/40 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-pink-200/40 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-300/30 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative z-10 p-6">
         {/* Header */}
         <div className="max-w-7xl mx-auto text-center mb-16">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-gray-800">
-            Master <span className="text-purple-600">Tailors</span>
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 text-[#1F2937]">
+            Master <span className="text-[#DB2777]">Women</span> in RemoteWorks
           </h1>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed mb-8">
-            Discover skilled{" "}
-            <span className="text-purple-600">tailoring professionals</span> for
-            all your custom clothing needs
+          <p className="text-xl text-[#374151] max-w-2xl mx-auto leading-relaxed mb-8">
+            Discover skilled <span className="text-[#DB2777]">Remote Works</span> for
+            all your custom requirement needs
           </p>
 
           {/* Search Bar */}
           <div className="max-w-md mx-auto relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-purple-400" />
+              <Search className="h-5 w-5 text-[#DB2777]" />
             </div>
             <input
               type="text"
               placeholder="Search tailors, specialties, locations..."
-              className="w-full pl-10 pr-4 py-3 border-2 border-purple-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-purple-500 focus:bg-white transition-all duration-300"
+              className="w-full pl-10 pr-4 py-3 border-2 border-pink-200 rounded-2xl bg-white/80 backdrop-blur-sm focus:outline-none focus:border-pink-600 focus:bg-white transition-all duration-300"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -379,18 +372,16 @@ const TailoringSkillsDisplay = () => {
           {/* Stats */}
           <div className="flex justify-center gap-8 mt-8">
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">
-                {skills.length}+
-              </div>
-              <div className="text-gray-600">Expert Tailors</div>
+              <div className="text-3xl font-bold text-[#DB2777]">{skills.length}+</div>
+              <div className="text-[#374151]">Expertise on Remote works</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">50k+</div>
-              <div className="text-gray-600">Happy Customers</div>
+              <div className="text-3xl font-bold text-[#DB2777]">50+</div>
+              <div className="text-[#374151]">Happy Customers</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">15+</div>
-              <div className="text-gray-600">Specialties</div>
+              <div className="text-3xl font-bold text-[#DB2777]">10+</div>
+              <div className="text-[#374151]">New Works</div>
             </div>
           </div>
         </div>
@@ -427,7 +418,7 @@ const TailoringSkillsDisplay = () => {
 
                   {/* Category Badge */}
                   <div className="absolute top-6 right-6">
-                    <div className="bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
+                    <div className="bg-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl backdrop-blur-sm">
                       {skill.category}
                     </div>
                   </div>
@@ -439,8 +430,8 @@ const TailoringSkillsDisplay = () => {
                         onClick={() => toggleLike(skill.id)}
                         className={`flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md transition-all duration-300 transform hover:scale-110 ${
                           skill.isLiked
-                            ? "bg-purple-600/80 text-white"
-                            : "bg-white/20 text-white hover:bg-purple-600/60"
+                            ? "bg-pink-600/80 text-white"
+                            : "bg-white/20 text-white hover:bg-pink-600/60"
                         }`}
                       >
                         <Heart
@@ -459,9 +450,7 @@ const TailoringSkillsDisplay = () => {
 
                     <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-2 rounded-full text-white">
                       <MessageCircle className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        {skill.comments}
-                      </span>
+                      <span className="text-sm font-medium">{skill.comments}</span>
                     </div>
                   </div>
                 </div>
@@ -470,19 +459,17 @@ const TailoringSkillsDisplay = () => {
               {/* Content Section */}
               <div className="w-full lg:w-1/2 space-y-6">
                 <div className="space-y-4">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+                  <h2 className="text-4xl md:text-5xl font-bold text-[#1F2937] leading-tight">
                     {skill.title}
                   </h2>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    {skill.description}
-                  </p>
+                  <p className="text-lg text-[#374151] leading-relaxed">{skill.description}</p>
 
                   {/* Specialties */}
                   <div className="flex flex-wrap gap-2">
                     {skill.specialties.map((specialty, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium"
+                        className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm font-medium"
                       >
                         {specialty}
                       </span>
@@ -491,21 +478,17 @@ const TailoringSkillsDisplay = () => {
                 </div>
 
                 {/* Tailor Info */}
-                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-purple-200/50 shadow-lg">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                <div className="flex items-center gap-4 p-6 bg-white/60 backdrop-blur-md rounded-2xl border border-pink-200/50 shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center shadow-lg">
                     <Scissors className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-gray-800">
-                      {skill.username}
-                    </h3>
-                    <div className="flex items-center gap-2 text-purple-600 mt-1">
+                    <h3 className="text-xl font-bold text-[#1F2937]">{skill.username}</h3>
+                    <div className="flex items-center gap-2 text-pink-600 mt-1">
                       <MapPin className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        {skill.address}
-                      </span>
+                      <span className="text-sm font-medium">{skill.address}</span>
                     </div>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-[#374151]">
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {skill.experience}
@@ -520,11 +503,9 @@ const TailoringSkillsDisplay = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-4">
-                  <button className="flex-1 bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-105 shadow-xl">
-                    Book Consultation
-                  </button>
-                  <button className="px-6 py-4 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold transition-all duration-300 hover:bg-purple-600 hover:text-white transform hover:scale-105">
-                    View Portfolio
+                  
+                  <button className="px-6 py-4 border border-pink-600 text-pink-600 rounded-xl font-semibold transition-all duration-300 hover:bg-pink-50 transform hover:scale-105">
+                    View Profile
                   </button>
                 </div>
               </div>
@@ -537,12 +518,10 @@ const TailoringSkillsDisplay = () => {
           <div className="text-center mt-20">
             <button
               onClick={handleShowMore}
-              className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:from-purple-600 hover:to-purple-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
+              className="bg-pink-600 text-white px-12 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:bg-pink-700 transform hover:scale-110 shadow-2xl flex items-center gap-3 mx-auto"
             >
               <Users className="w-5 h-5" />
-              {isLoggedIn
-                ? "Show More Tailors"
-                : "Login to See More Premium Tailors"}
+              {isLoggedIn ? "Show More Tailors" : "Login to See More Premium Tailors"}
             </button>
           </div>
         )}
@@ -552,33 +531,30 @@ const TailoringSkillsDisplay = () => {
       {showLoginModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform animate-scale-up">
-            <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
-              Login Required
-            </h2>
-            <p className="text-gray-600 text-center mb-6">
-              Login to view all premium tailoring professionals and their
-              exclusive services.
+            <h2 className="text-3xl font-bold text-center mb-6 text-[#1F2937]">Login Required</h2>
+            <p className="text-[#374151] text-center mb-6">
+              Login to view all premium tailoring professionals and their exclusive services.
             </p>
             <div className="space-y-4">
               <input
                 type="email"
                 placeholder="Email Address"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600"
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600"
               />
               <button
                 onClick={handleLogin}
-                className="w-full bg-gradient-to-r pink-50 to-pink-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:from-purple-600 hover:to-purple-700"
+                className="w-full bg-pink-600 text-white py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:bg-pink-700"
               >
                 Login & Continue
               </button>
               <button
                 onClick={() => setShowLoginModal(false)}
-                className="w-full text-gray-600 py-2 text-sm hover:text-gray-800 transition-colors"
+                className="w-full text-[#374151] py-2 text-sm hover:text-[#1F2937] transition-colors"
               >
                 Cancel
               </button>
@@ -589,40 +565,18 @@ const TailoringSkillsDisplay = () => {
 
       <style jsx>{`
         @keyframes slide-up {
-          from {
-            opacity: 0;
-            transform: translateY(60px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-
         @keyframes scale-up {
-          from {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
         }
-
-        .animate-slide-up {
-          animation: slide-up 0.8s ease-out forwards;
-          opacity: 0;
-        }
-
-        .animate-scale-up {
-          animation: scale-up 0.3s ease-out forwards;
-        }
+        .animate-slide-up { animation: slide-up 0.8s ease-out forwards; opacity: 0; }
+        .animate-scale-up { animation: scale-up 0.3s ease-out forwards; }
       `}</style>
     </div>
   );
 };
 
 export default TailoringSkillsDisplay;
-
-
