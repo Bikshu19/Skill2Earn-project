@@ -28,7 +28,7 @@ const ProfilePage = () => {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:5000/api/me", {
+        const res = await fetch("https://skill2earn-project.onrender.com/api/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
