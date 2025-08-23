@@ -24,7 +24,7 @@ export default function MessageForm() {
     setStatus('Sending...');
 
     try {
-      const response = await fetch('http://localhost:5000/api/messages', {
+      const response = await fetch('https://skill2earn-project.onrender.com/api/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
